@@ -1,4 +1,4 @@
-import { allowContractCaller } from "./client/pox-3-client.ts";
+import { allowContractCaller } from "./client/pox-4-client.js";
 import {
   delegateStx,
   fpDelegationAllowContractCaller,

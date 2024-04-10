@@ -1,7 +1,7 @@
 import {
   allowContractCaller,
   stackAggregationCommitIndexed,
-} from "./client/pox-3-client.ts";
+} from "./client/pox-4-client.js";
 import {
   delegateStackStxSimple,
   delegateStx,
@@ -40,12 +40,7 @@ Clarinet.test({
         wallet_2
       ),
 
-      delegateStackStxSimple(
-        [wallet_1, wallet_2],
-        poxAddrPool1,
-        40,
-        deployer
-      ),
+      delegateStackStxSimple([wallet_1, wallet_2], poxAddrPool1, 40, deployer),
     ]);
 
     // verify results for allow contract caller

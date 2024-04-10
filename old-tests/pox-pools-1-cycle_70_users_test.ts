@@ -1,8 +1,8 @@
-import { allowContractCaller } from "./client/pox-3-client.ts";
+import { allowContractCaller } from "./client/pox-4-client.js";
 import {
   delegateStackStx,
   delegateStx,
-  getTotal
+  getTotal,
 } from "./client/pox-pools-1-cycle-client.ts";
 import { Clarinet, Tx, Chain, Account, types } from "./deps.ts";
 import { btcAddrWallet1 } from "./constants.ts";
@@ -153,7 +153,7 @@ Clarinet.test({
     block.receipts.map((r: any) => r.result.expectOk());
 
     // verify total
-    const total = getTotal(deployer.address, 1, chain, deployer)
+    const total = getTotal(deployer.address, 1, chain, deployer);
     total.result.expectUint(10_000_070_000_000);
   },
 });

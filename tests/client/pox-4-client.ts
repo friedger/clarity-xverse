@@ -10,7 +10,7 @@ export function allowContractCaller(
   user: Account
 ) {
   return Tx.contractCall(
-    "ST000000000000000000002AMW42H.pox-3",
+    "ST000000000000000000002AMW42H.pox-4",
     "allow-contract-caller",
     [
       types.principal(contractCaller),
@@ -22,7 +22,7 @@ export function allowContractCaller(
 
 export function delegateStx(amount: number, delegateTo: string, user: Account) {
   return Tx.contractCall(
-    "ST000000000000000000002AMW42H.pox-3",
+    "ST000000000000000000002AMW42H.pox-4",
     "delegate-stx",
     [
       types.uint(amount),
@@ -41,7 +41,7 @@ export function delegateStackExtend(
   user: Account
 ) {
   return Tx.contractCall(
-    "ST000000000000000000002AMW42H.pox-3",
+    "ST000000000000000000002AMW42H.pox-4",
     "delegate-stack-extend",
     [
       types.principal(stacker.address),
@@ -58,7 +58,7 @@ export function stackAggregationCommitIndexed(
   poolOperator: Account
 ) {
   return Tx.contractCall(
-    "ST000000000000000000002AMW42H.pox-3",
+    "ST000000000000000000002AMW42H.pox-4",
     "stack-aggregation-commit-indexed",
     [types.tuple(poxAddr), types.uint(cycle)],
     poolOperator.address
@@ -72,7 +72,7 @@ export function stackAggregationIncrease(
   poolOperator: Account
 ) {
   return Tx.contractCall(
-    "ST000000000000000000002AMW42H.pox-3",
+    "ST000000000000000000002AMW42H.pox-4",
     "stack-aggregation-increase",
     [types.tuple(poxAddr), types.uint(cycle), types.uint(poxAddrIndex)],
     poolOperator.address
@@ -81,7 +81,7 @@ export function stackAggregationIncrease(
 
 export function revokeDelegateStx(user: Account) {
   return Tx.contractCall(
-    "ST000000000000000000002AMW42H.pox-3",
+    "ST000000000000000000002AMW42H.pox-4",
     "revoke-delegate-stx",
     [],
     user.address
@@ -96,7 +96,7 @@ export function getPartialStackedByCycle(
   user: Account
 ) {
   return chain.callReadOnlyFn(
-    "ST000000000000000000002AMW42H.pox-3",
+    "ST000000000000000000002AMW42H.pox-4",
     "get-partial-stacked-by-cycle",
     [types.tuple(poolPoxAddr), types.uint(cycle), types.principal(poolAddress)],
     user.address
@@ -110,7 +110,7 @@ export function getRewardSetPoxAddress(
   user: Account
 ) {
   return chain.callReadOnlyFn(
-    "ST000000000000000000002AMW42H.pox-3",
+    "ST000000000000000000002AMW42H.pox-4",
     "get-reward-set-pox-address",
     [types.uint(cycle), types.uint(index)],
     user.address
@@ -119,7 +119,7 @@ export function getRewardSetPoxAddress(
 
 export function getPoxInfo(chain: Chain, user: Account) {
   return chain.callReadOnlyFn(
-    "ST000000000000000000002AMW42H.pox-3",
+    "ST000000000000000000002AMW42H.pox-4",
     "get-pox-info",
     [],
     user.address

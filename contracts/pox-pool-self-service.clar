@@ -181,15 +181,16 @@
             ;; Call stack-aggregate-increase.
             ;; It might fail because called in the same cycle twice.
       index (match (as-contract (contract-call? 'ST000000000000000000002AMW42H.pox-4 stack-aggregation-increase (var-get pool-pox-address) reward-cycle index))
-              success (map-set last-aggregation reward-cycle block-height)
-              error (begin (print {err-increase-ignored: error}) false))
+              success (begin (map-set last-aggregation reward-cycle block-height) (ok true))
+              error (begin (print {err-increase-ignored: error}) (ok false)))
             ;; Total stacked is still below minimum.
             ;; Just try to commit, it might fail because minimum not yet met
       (match (as-contract (contract-call? 'ST000000000000000000002AMW42H.pox-4 stack-aggregation-commit-indexed (var-get pool-pox-address) reward-cycle none 0x1234 u1 u1))
         index (begin
                 (map-set pox-addr-indices reward-cycle index)
-                (map-set last-aggregation reward-cycle block-height))
-        error (begin (print {err-commit-ignored: error}) false))))) ;; ignore errors
+                (map-set last-aggregation reward-cycle block-height)
+                (ok true))
+        error (begin (print {err-commit-ignored: error}) (ok false)))))) ;; ignore errors
 
 (define-private (map-extend-locked-amount (user principal) (unlock-height uint))
   (match (map-get? locked-amounts user)

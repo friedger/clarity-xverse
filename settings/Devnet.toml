@@ -74,6 +74,7 @@ balance = 100_000_000_000_000
 # btc_address: mjSrB3wS4xab3kYqFktwBzfTdPg367ZJ2d
 
 [devnet]
+docker_host = "/home/friedger/.docker/desktop/docker.sock"
 disable_stacks_explorer = false
 disable_stacks_api = false
 bitcoin_controller_automining_disabled = true

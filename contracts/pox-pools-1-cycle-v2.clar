@@ -1,4 +1,4 @@
-;; @contract pox-4 wrapper contract for stacking pools
+;; @contract pox-3 wrapper contract for stacking pools
 ;; @version 2
 ;; Changelog: fix decrease error, add stacking stats for this pool, add metadata for users
 
@@ -16,9 +16,9 @@
 (define-constant err-no-stacker-info (err u501))
 (define-constant err-no-user-info (err u502))
 (define-constant err-decrease-forbidden (err u503))
-;; Error code 3 is used by pox-4 contract for already stacking errors
+;; Error code 3 is used by pox-3 contract for already stacking errors
 (define-constant err-already-stacking (err u603))
-;; Error code 9 is used by pox-4 contract for stacking-permission-denied
+;; Error code 9 is used by pox-3 contract for stacking-permission-denied
 (define-constant err-stacking-permission-denied (err u609))
 
 ;; Allowed contract-callers handling a user's stacking activity.
@@ -61,7 +61,7 @@
     (map-set grouped-stackers-len {pool: pool, reward-cycle: reward-cycle} index)))
 
 (define-private (map-set-details (pool principal) (details {lock-amount: uint, stacker: principal, unlock-burn-height: uint, pox-addr: {hashbytes: (buff 32), version: (buff 1)}, cycle: uint}))
-  (let ((reward-cycle (+ (contract-call? 'ST000000000000000000002AMW42H.pox-4 current-pox-reward-cycle) u1))
+  (let ((reward-cycle (+ (contract-call? 'ST000000000000000000002AMW42H.pox-3 current-pox-reward-cycle) u1))
         (last-index (get-status-lists-last-index pool reward-cycle))
         (stacker-key {pool: pool, reward-cycle: reward-cycle, index: last-index}))
     (match (map-get? grouped-stackers stacker-key)
@@ -72,25 +72,25 @@
     (map-set grouped-totals {pool: pool, reward-cycle: reward-cycle} (+ (get-total pool reward-cycle) (get lock-amount details)))))
 
 ;;
-;; Helper functions for pox-4 calls
+;; Helper functions for pox-3 calls
 ;;
 
 ;; Get stacker info
 (define-private (pox-get-stacker-info (user principal))
-  (contract-call? 'ST000000000000000000002AMW42H.pox-4 get-stacker-info user))
+  (contract-call? 'ST000000000000000000002AMW42H.pox-3 get-stacker-info user))
 
 ;; Revokes and delegates stx
 (define-private (delegate-stx-inner (amount-ustx uint) (delegate-to principal) (until-burn-ht (optional uint)))
   (let ((result-revoke
             ;; Calls revoke and ignores result
-          (contract-call? 'ST000000000000000000002AMW42H.pox-4 revoke-delegate-stx)))
+          (contract-call? 'ST000000000000000000002AMW42H.pox-3 revoke-delegate-stx)))
     ;; Calls delegate-stx, converts any error to uint
-    (match (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stx amount-ustx delegate-to until-burn-ht none)
+    (match (contract-call? 'ST000000000000000000002AMW42H.pox-3 delegate-stx amount-ustx delegate-to until-burn-ht none)
       success (ok success)
       error (err (* u1000 (to-uint error))))))
 
 
-;; Calls pox-4 delegate-stack-extend and delegate-stack-increase.
+;; Calls pox-3 delegate-stack-extend and delegate-stack-increase.
 ;; parameter amount-ustx must be lower or equal the stx balance and the delegated amount
 (define-private (delegate-stack-extend-increase (user principal)
                   (amount-ustx uint)
@@ -109,7 +109,7 @@
                       unlock-burn-height: unlock-burn-height}))
                 ;; else increase
                 (let ((increase-by (- amount-ustx locked-amount)))
-                  (match (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stack-increase
+                  (match (contract-call? 'ST000000000000000000002AMW42H.pox-3 delegate-stack-increase
                           user pox-address increase-by)
                     success-increase (ok {lock-amount: (get total-locked success-increase),
                                           stacker: user,
@@ -124,10 +124,10 @@
                   (pox-address {hashbytes: (buff 32), version: (buff 1)})
                   (status {locked: uint, unlocked: uint, unlock-height: uint})
                 )
-  (let ((current-cycle (contract-call? 'ST000000000000000000002AMW42H.pox-4 current-pox-reward-cycle))
+  (let ((current-cycle (contract-call? 'ST000000000000000000002AMW42H.pox-3 current-pox-reward-cycle))
         (unlock-height (get unlock-height status)))
     (if (not-locked-for-cycle unlock-height (+ u1 current-cycle))
-      (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stack-extend
+      (contract-call? 'ST000000000000000000002AMW42H.pox-3 delegate-stack-extend
              user pox-address u1)
       (ok {stacker: user, unlock-burn-height: unlock-height}))))
 
@@ -172,7 +172,7 @@
               user-details
                 ;; Call delegate-stack-stx
                 ;; On failure, call delegate-stack-extend and increase
-              (match (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stack-stx
+              (match (contract-call? 'ST000000000000000000002AMW42H.pox-3 delegate-stack-stx
                        user amount-ustx
                        pox-address start-burn-ht u1)
                 stacker-details  (begin
@@ -216,7 +216,7 @@
       md (map set-metadata-internal (get keys md) (get values md))
       (list true))
     (map-set user-data tx-sender
-      {pox-addr: user-pox-addr, cycle: (contract-call? 'ST000000000000000000002AMW42H.pox-4 current-pox-reward-cycle)})
+      {pox-addr: user-pox-addr, cycle: (contract-call? 'ST000000000000000000002AMW42H.pox-3 current-pox-reward-cycle)})
     (delegate-stx-inner amount-ustx delegate-to until-burn-ht)))
 
 ;; @desc Pool admins call this function to lock stacks of their pool members in batches for 1 cycle.
@@ -268,7 +268,7 @@
 
 ;; Returns currently delegated amount for a given user
 (define-read-only (get-delegated-amount (user principal))
-  (default-to u0 (get amount-ustx (contract-call? 'ST000000000000000000002AMW42H.pox-4 get-delegation-info user))))
+  (default-to u0 (get amount-ustx (contract-call? 'ST000000000000000000002AMW42H.pox-3 get-delegation-info user))))
 
 ;; Returns information about last delegation call for a given user
 ;; This information can be obsolete due to a normal revoke call
@@ -288,7 +288,7 @@
 ;; Returns true if the given burn chain height is smaller
 ;; than the start of the given reward cycle id.
 (define-read-only (not-locked-for-cycle (unlock-burn-height uint) (cycle uint))
-  (<= unlock-burn-height (contract-call? 'ST000000000000000000002AMW42H.pox-4 reward-cycle-to-burn-height cycle)))
+  (<= unlock-burn-height (contract-call? 'ST000000000000000000002AMW42H.pox-3 reward-cycle-to-burn-height cycle)))
 
 ;;
 ;; Functions to handle metadata

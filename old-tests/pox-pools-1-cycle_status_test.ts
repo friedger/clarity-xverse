@@ -1,7 +1,7 @@
 import {
   allowContractCaller,
   stackAggregationCommitIndexed,
-} from "./client/pox-3-client.ts";
+} from "./client/pox-4-client.js";
 import {
   delegateStackStx,
   delegateStx,
@@ -29,7 +29,13 @@ Clarinet.test({
     const poxPools1CycleContract = pool_1.address + ".pox-pools-1-cycle";
 
     // info before delegation
-    let response = getStatus(pool_1.address, wallet_1.address, 1, chain, wallet_1);
+    let response = getStatus(
+      pool_1.address,
+      wallet_1.address,
+      1,
+      chain,
+      wallet_1
+    );
     response.result.expectErr().expectUint(Errors.NoStackerInfo);
 
     response = getUserData(wallet_1.address, chain, wallet_1);

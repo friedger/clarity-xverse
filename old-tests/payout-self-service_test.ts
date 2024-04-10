@@ -1,4 +1,4 @@
-import { allowContractCaller, getCycleLength } from "./client/pox-3-client.ts";
+import { allowContractCaller, getCycleLength } from "./client/pox-4-client.js";
 import { delegateStx } from "./client/pox-pool-self-service-client.ts";
 import { Account, Chain, Clarinet, Tx, types } from "./deps.ts";
 

@@ -14,29 +14,38 @@ contract_id = 'SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.pox-fast-pool-v2'
 [contracts.fp-auto-extend]
 path = 'contracts/fast-pool/fp-auto-extend.clar'
 clarity_version = 2
-epoch = 2.4
+epoch = 2.5
 
 [contracts.helper]
 path = 'contracts/testing/helper.clar'
 clarity_version = 2
-epoch = 2.4
+epoch = 2.5
 
 [contracts.payout-self-service]
 path = 'contracts/payout/payout-self-service.clar'
 clarity_version = 2
-epoch = 2.4
+epoch = 2.5
 
-[contracts.pox-pool-self-service]
+[contracts.pox-pool-self-service-v2]
 path = 'contracts/pox-pool-self-service.clar'
 clarity_version = 2
-epoch = 2.4
+epoch = 2.5
 
-[contracts.pox-pools-1-cycle]
+[contracts.pox-pools-1-cycle-v2]
 path = 'contracts/pox-pools-1-cycle.clar'
 clarity_version = 2
-epoch = 2.4
+epoch = 2.5
 
 [contracts.fp-stx-account-helper]
 path = 'contracts/payout/fp-stx-account-helper.clar'
 clarity_version = 2
-epoch = 2.4
+epoch = 2.5
+
+###
+### Tests
+###
+
+[contracts.pox-pools-1-cycle-test]
+path = 'tests/pox-pools-1-cycle_test.clar'
+clarity_version = 2
+epoch = 2.5

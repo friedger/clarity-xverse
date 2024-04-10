@@ -1,4 +1,4 @@
-import { getCycleLength } from "./client/pox-3-client.ts";
+import { getCycleLength } from "./client/pox-4-client.js";
 import { Account, Chain, Clarinet, Tx, types } from "./deps.ts";
 
 Clarinet.test({
@@ -50,7 +50,6 @@ Clarinet.test({
     block.receipts[1].result.expectOk().expectBool(false);
   },
 });
-
 
 Clarinet.test({
   name: "Ensure that auto-extend-job does not run without at least 1 user",

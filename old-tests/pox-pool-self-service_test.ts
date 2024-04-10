@@ -1,4 +1,4 @@
-import { allowContractCaller, getCycleLength } from "./client/pox-3-client.ts";
+import { allowContractCaller, getCycleLength } from "./client/pox-4-client.js";
 import {
   delegateStackStx,
   delegateStx,
