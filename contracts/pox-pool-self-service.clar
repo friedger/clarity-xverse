@@ -85,15 +85,6 @@
       success (ok success)
       error (err (* u1000 (to-uint error))))))
 
-;; Locks the users STX and extends the locking period
-;; and increases the amount if necessary.
-;; If possible, the locked stx of the pool are commited
-(define-private (lock-and-commit (user principal) (current-cycle uint))
-  (match (as-contract (lock-delegated-stx user))
-    lock-result (ok {lock-result: lock-result,
-      commit-result: (maybe-stack-aggregation-commit current-cycle)})
-    error (err error)))
-
 ;; Tries to lock delegated stx (delegate-stack-stx).
 ;; If user already stacked then extend and increase
 (define-private (lock-delegated-stx (user principal))
@@ -174,18 +165,20 @@
 ;; the index of the first successful call.
 ;; This index gives access to the internal map of the pox-4 contract
 ;; that handles the reward addresses.
-(define-public (maybe-stack-aggregation-commit (current-cycle uint))
+(define-public (maybe-stack-aggregation-commit (current-cycle uint) 
+                  (signer-sig (optional (buff 65))) (signer-key (buff 33))
+                  (max-amount uint) (auth-id uint))
   (let ((reward-cycle (+ u1 current-cycle)))
     (match (map-get? pox-addr-indices reward-cycle)
             ;; Total stacked already reached minimum.
             ;; Call stack-aggregate-increase.
             ;; It might fail because called in the same cycle twice.
-      index (match (as-contract (contract-call? 'ST000000000000000000002AMW42H.pox-4 stack-aggregation-increase (var-get pool-pox-address) reward-cycle index))
+      index (match (as-contract (contract-call? 'ST000000000000000000002AMW42H.pox-4 stack-aggregation-increase (var-get pool-pox-address) reward-cycle index signer-sig signer-key max-amount auth-id))
               success (begin (map-set last-aggregation reward-cycle block-height) (ok true))
               error (begin (print {err-increase-ignored: error}) (ok false)))
             ;; Total stacked is still below minimum.
             ;; Just try to commit, it might fail because minimum not yet met
-      (match (as-contract (contract-call? 'ST000000000000000000002AMW42H.pox-4 stack-aggregation-commit-indexed (var-get pool-pox-address) reward-cycle none 0x1234 u1 u1))
+      (match (as-contract (contract-call? 'ST000000000000000000002AMW42H.pox-4 stack-aggregation-commit-indexed (var-get pool-pox-address) reward-cycle signer-sig signer-key max-amount auth-id))
         index (begin
                 (map-set pox-addr-indices reward-cycle index)
                 (map-set last-aggregation reward-cycle block-height)
@@ -217,8 +210,8 @@
     (asserts! (check-caller-allowed) err-stacking-permission-denied)
     ;; Do 1. and 2.
     (try! (delegate-stx-inner amount-ustx (as-contract tx-sender) none))
-    ;; Do 3. and 4.
-    (lock-and-commit user current-cycle)))
+    ;; Do 3.
+    (as-contract (lock-delegated-stx user))))
 
 ;; Stacks the delegated amount for the given user for the next cycle.
 ;; This function can be called by automation, friends or family for user that have delegated once.
@@ -227,9 +220,7 @@
   (let ((current-cycle (contract-call? 'ST000000000000000000002AMW42H.pox-4 current-pox-reward-cycle)))
     (asserts! (can-lock-now current-cycle) err-too-early)
     ;; Do 3.
-    (try! (as-contract (lock-delegated-stx user)))
-    ;; Do 4.
-    (ok (maybe-stack-aggregation-commit current-cycle))))
+    (as-contract (lock-delegated-stx user))))
 
 ;; Stacks the delegated amount for the given users for the next cycle.
 ;; This function can be called by automation, friends or family for users that have delegated once.
@@ -239,11 +230,7 @@
         (start-burn-ht (+ burn-block-height u1)))
     (asserts! (can-lock-now current-cycle) err-too-early)
     ;; Do 3. for users
-    (let ((locking-result
-            (as-contract (fold lock-delegated-stx-fold users (list)))))
-      ;; Do 4.
-      (ok {locking-result: locking-result,
-        commit-result: (maybe-stack-aggregation-commit current-cycle)}))))
+    (ok (as-contract (fold lock-delegated-stx-fold users (list))))))
 
 ;;
 ;; Admin functions

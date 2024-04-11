@@ -11,21 +11,6 @@ contract_id = 'SP3C0TCQS0C0YY8E0V3EJ7V4X9571885D44M8EFWF.arkadiko-automation-tra
 [[project.requirements]]
 contract_id = 'SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.pox-fast-pool-v2'
 
-[contracts.fp-auto-extend]
-path = 'contracts/fast-pool/fp-auto-extend.clar'
-clarity_version = 2
-epoch = 2.5
-
-[contracts.helper]
-path = 'contracts/testing/helper.clar'
-clarity_version = 2
-epoch = 2.5
-
-[contracts.payout-self-service]
-path = 'contracts/payout/payout-self-service.clar'
-clarity_version = 2
-epoch = 2.5
-
 [contracts.pox-pool-self-service-v2]
 path = 'contracts/pox-pool-self-service.clar'
 clarity_version = 2
@@ -36,16 +21,11 @@ path = 'contracts/pox-pools-1-cycle.clar'
 clarity_version = 2
 epoch = 2.5
 
-[contracts.fp-stx-account-helper]
-path = 'contracts/payout/fp-stx-account-helper.clar'
-clarity_version = 2
-epoch = 2.5
-
 ###
 ### Tests
 ###
 
-[contracts.pox-pools-1-cycle-test]
-path = 'tests/pox-pools-1-cycle_test.clar'
+[contracts.pox-pools-1-cycle_flow_test]
+path = 'tests/pox-pools-1-cycle_flow_test.clar'
 clarity_version = 2
 epoch = 2.5

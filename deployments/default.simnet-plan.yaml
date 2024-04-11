@@ -71,33 +71,13 @@ plan:
             path: contracts/pox-pool-self-service.clar
             clarity-version: 2
         - emulated-contract-publish:
-            contract-name: fp-auto-extend
-            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: contracts/fast-pool/fp-auto-extend.clar
-            clarity-version: 2
-        - emulated-contract-publish:
-            contract-name: fp-stx-account-helper
-            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: contracts/payout/fp-stx-account-helper.clar
-            clarity-version: 2
-        - emulated-contract-publish:
             contract-name: pox-pools-1-cycle-v2
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: contracts/pox-pools-1-cycle.clar
             clarity-version: 2
         - emulated-contract-publish:
-            contract-name: helper
+            contract-name: pox-pools-1-cycle_flow_test
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: contracts/testing/helper.clar
-            clarity-version: 2
-        - emulated-contract-publish:
-            contract-name: payout-self-service
-            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: contracts/payout/payout-self-service.clar
-            clarity-version: 2
-        - emulated-contract-publish:
-            contract-name: pox-pools-1-cycle-test
-            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: tests/pox-pools-1-cycle_test.clar
+            path: tests/pox-pools-1-cycle_flow_test.clar
             clarity-version: 2
       epoch: "2.5"

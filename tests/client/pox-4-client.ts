@@ -1,4 +1,12 @@
-import { Account, Chain, Tx, types } from "../deps.ts";
+import { tx } from "@hirosystems/clarinet-sdk";
+import {
+  Cl,
+  ClarityType,
+  ResponseOkCV,
+  TupleCV,
+  UIntCV,
+} from "@stacks/transactions";
+import { expect } from "vitest";
 
 const user = {
   address: "ST000000000000000000002AMW42H",
@@ -7,61 +15,52 @@ const user = {
 export function allowContractCaller(
   contractCaller: string,
   untilBurnHt: number | undefined,
-  user: Account
+  user: string
 ) {
-  return Tx.contractCall(
+  return tx.callPublicFn(
     "ST000000000000000000002AMW42H.pox-4",
     "allow-contract-caller",
     [
-      types.principal(contractCaller),
-      untilBurnHt ? types.some(types.uint(untilBurnHt)) : types.none(),
+      Cl.principal(contractCaller),
+      untilBurnHt ? Cl.some(Cl.uint(untilBurnHt)) : Cl.none(),
     ],
-    user.address
+    user
   );
 }
 
-export function delegateStx(amount: number, delegateTo: string, user: Account) {
-  return Tx.contractCall(
+export function delegateStx(amount: number, delegateTo: string, user: string) {
+  return tx.callPublicFn(
     "ST000000000000000000002AMW42H.pox-4",
     "delegate-stx",
-    [
-      types.uint(amount),
-      types.principal(delegateTo),
-      types.none(),
-      types.none(),
-    ],
-    user.address
+    [Cl.uint(amount), Cl.principal(delegateTo), Cl.none(), Cl.none()],
+    user
   );
 }
 
 export function delegateStackExtend(
-  stacker: Account,
+  stacker: string,
   poxAddr: { version: string; hashbytes: string },
   extendedCount: number,
-  user: Account
+  user: string
 ) {
-  return Tx.contractCall(
+  return tx.callPublicFn(
     "ST000000000000000000002AMW42H.pox-4",
     "delegate-stack-extend",
-    [
-      types.principal(stacker.address),
-      types.tuple(poxAddr),
-      types.uint(extendedCount),
-    ],
-    user.address
+    [Cl.principal(stacker), poxAddrCV(poxAddr), Cl.uint(extendedCount)],
+    user
   );
 }
 
 export function stackAggregationCommitIndexed(
   poxAddr: { version: string; hashbytes: string },
   cycle: number,
-  poolOperator: Account
+  poolOperator: string
 ) {
-  return Tx.contractCall(
+  return tx.callPublicFn(
     "ST000000000000000000002AMW42H.pox-4",
     "stack-aggregation-commit-indexed",
-    [types.tuple(poxAddr), types.uint(cycle)],
-    poolOperator.address
+    [poxAddrCV(poxAddr), Cl.uint(cycle)],
+    poolOperator
   );
 }
 
@@ -69,22 +68,22 @@ export function stackAggregationIncrease(
   poxAddr: { version: string; hashbytes: string },
   cycle: number,
   poxAddrIndex: number,
-  poolOperator: Account
+  poolOperator: string
 ) {
-  return Tx.contractCall(
+  return tx.callPublicFn(
     "ST000000000000000000002AMW42H.pox-4",
     "stack-aggregation-increase",
-    [types.tuple(poxAddr), types.uint(cycle), types.uint(poxAddrIndex)],
-    poolOperator.address
+    [poxAddrCV(poxAddr), Cl.uint(cycle), Cl.uint(poxAddrIndex)],
+    poolOperator
   );
 }
 
-export function revokeDelegateStx(user: Account) {
-  return Tx.contractCall(
+export function revokeDelegateStx(user: string) {
+  return tx.callPublicFn(
     "ST000000000000000000002AMW42H.pox-4",
     "revoke-delegate-stx",
     [],
-    user.address
+    user
   );
 }
 
@@ -92,57 +91,82 @@ export function getPartialStackedByCycle(
   poolPoxAddr: { version: string; hashbytes: string },
   cycle: number,
   poolAddress: string,
-  chain: Chain,
-  user: Account
+  user: string
 ) {
-  return chain.callReadOnlyFn(
+  return tx.callPublicFn(
     "ST000000000000000000002AMW42H.pox-4",
     "get-partial-stacked-by-cycle",
-    [types.tuple(poolPoxAddr), types.uint(cycle), types.principal(poolAddress)],
-    user.address
+    [poxAddrCV(poolPoxAddr), Cl.uint(cycle), Cl.principal(poolAddress)],
+    user
   );
 }
 
 export function getRewardSetPoxAddress(
   cycle: number,
   index: number,
-  chain: Chain,
-  user: Account
+  user: string
 ) {
-  return chain.callReadOnlyFn(
+  return tx.callPublicFn(
     "ST000000000000000000002AMW42H.pox-4",
     "get-reward-set-pox-address",
-    [types.uint(cycle), types.uint(index)],
-    user.address
+    [Cl.uint(cycle), Cl.uint(index)],
+    user
   );
 }
 
-export function getPoxInfo(chain: Chain, user: Account) {
-  return chain.callReadOnlyFn(
+export function getPoxInfo(user: string) {
+  return simnet.callReadOnlyFn(
     "ST000000000000000000002AMW42H.pox-4",
     "get-pox-info",
     [],
-    user.address
+    user
   );
 }
 
-export async function asyncExpectCurrentCycle(chain: Chain, cycle: number) {
-  const poxInfoResponse = await getPoxInfo(chain, user);
-  const poxInfo = poxInfoResponse.result.expectOk().expectTuple();
-  poxInfo["reward-cycle-id"].expectUint(cycle);
+export async function asyncExpectCurrentCycle(cycle: number) {
+  const poxInfoResponse = await getPoxInfo(user.address);
+  expect(poxInfoResponse.result.type).toBe(ClarityType.ResponseOk);
+
+  const poxInfo = (
+    poxInfoResponse.result as ResponseOkCV<
+      TupleCV<{ "reward-cycle-id": UIntCV }>
+    >
+  ).value.data;
+  expect(poxInfo["reward-cycle-id"]).toBeUint(cycle);
 }
 
-export async function getCycleLength(chain: Chain) {
-  const poxInfoResponse = await getPoxInfo(chain, user);
-  const poxInfo = poxInfoResponse.result.expectOk().expectTuple();
+export async function getCycleLength() {
+  const poxInfoResponse = await getPoxInfo(user.address);
+  expect(poxInfoResponse.result.type).toBe(ClarityType.ResponseOk);
 
   const CYCLE = 1050;
   const PREPARE_CYCLE_LENGTH = 50;
-  poxInfo["reward-cycle-length"].expectUint(CYCLE);
-  poxInfo["prepare-cycle-length"].expectUint(PREPARE_CYCLE_LENGTH);
+
+  const poxInfo = (
+    poxInfoResponse.result as ResponseOkCV<
+      TupleCV<{ "reward-cycle-id": UIntCV; "prepare-cycle-length": UIntCV }>
+    >
+  ).value.data;
+  expect(poxInfo["reward-cycle-id"]).toBeUint(CYCLE);
+  expect(poxInfo["prepare-cycle-length"]).toBeUint(PREPARE_CYCLE_LENGTH);
   return {
     CYCLE,
     HALF_CYCLE: CYCLE / 2,
     PREPARE_CYCLE_LENGTH,
   };
 }
+
+export const poxAddrCV = (poxAddr: { version: string; hashbytes: string }) => {
+  return Cl.tuple({
+    hashbytes: Cl.bufferFromHex(
+      poxAddr.hashbytes.startsWith("0x")
+        ? poxAddr.hashbytes.substring(2)
+        : poxAddr.hashbytes
+    ),
+    version: Cl.bufferFromHex(
+      poxAddr.version.startsWith("0x")
+        ? poxAddr.version.substring(2)
+        : poxAddr.version
+    ),
+  });
+};
