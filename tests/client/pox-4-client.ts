@@ -54,12 +54,23 @@ export function delegateStackExtend(
 export function stackAggregationCommitIndexed(
   poxAddr: { version: string; hashbytes: string },
   cycle: number,
+  signature: string,
+  signerKey: string,
+  maxAmount: number,
+  authId: number,
   poolOperator: string
 ) {
   return tx.callPublicFn(
     "ST000000000000000000002AMW42H.pox-4",
     "stack-aggregation-commit-indexed",
-    [poxAddrCV(poxAddr), Cl.uint(cycle)],
+    [
+      poxAddrCV(poxAddr),
+      Cl.uint(cycle),
+      signature ? Cl.some(Cl.bufferFromHex(signature)) : Cl.none(),
+      Cl.bufferFromHex(signerKey),
+      Cl.uint(maxAmount),
+      Cl.uint(authId),
+    ],
     poolOperator
   );
 }

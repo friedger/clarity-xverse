@@ -1,6 +1,15 @@
-import { Cl } from "@stacks/transactions";
+import {
+  Cl,
+  ResponseCV,
+  ResponseErrorCV,
+  ResponseOkCV,
+  TupleCV,
+  UIntCV,
+} from "@stacks/transactions";
 import { poxAddrCV } from "./pox-4-client";
-import { tx } from "@hirosystems/clarinet-sdk";
+import { ParsedTransactionResult, tx } from "@hirosystems/clarinet-sdk";
+
+export const POX_POOLS_1_CYCLE_CONTRACT_NAME = "pox-pools-1-cycle-v2";
 
 export function poxDelegationAllowContractCaller(
   contractCaller: string,
@@ -27,7 +36,7 @@ export function delegateStx(
   caller: string
 ) {
   return tx.callPublicFn(
-    "pox-pools-1-cycle-v2",
+    POX_POOLS_1_CYCLE_CONTRACT_NAME,
     "delegate-stx",
     [
       Cl.uint(amount),
@@ -119,6 +128,15 @@ export function getTotal(poolAddress: string, cycle: number, user: string) {
     user
   );
 }
+
+export interface StatusResponseOKCV
+  extends ResponseOkCV<
+    TupleCV<{
+      "stacker-info": TupleCV<any>;
+      "user-info": TupleCV<any>;
+      total: UIntCV;
+    }>
+  > {}
 
 export function getStatus(
   poolAddress: string,
