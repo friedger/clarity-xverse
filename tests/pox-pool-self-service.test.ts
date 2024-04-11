@@ -1,3 +1,5 @@
+import { expectOkTrue } from "@stacks/clarunit/src/parser/test-helpers.ts";
+import { Cl } from "@stacks/transactions";
 import { describe, expect, it } from "vitest";
 import { allowContractCaller, getCycleLength } from "./client/pox-4-client.js";
 import {
@@ -8,34 +10,16 @@ import {
 } from "./client/pox-pool-self-service-client.ts";
 import { poxAddrFP } from "./constants.ts";
 import {
+  expectOkLockingResult,
   expectPartialStackedByCycle,
   expectTotalStackedByCycle,
 } from "./utils.ts";
-import { expectOkTrue } from "@stacks/clarunit/src/parser/test-helpers.ts";
-import { Cl } from "@stacks/transactions";
-import { ParsedTransactionResult } from "@hirosystems/clarinet-sdk";
 
 const accounts = simnet.getAccounts();
 const deployer = accounts.get("deployer")!;
 const wallet_1 = accounts.get("wallet_1")!;
 const wallet_2 = accounts.get("wallet_2")!;
 
-const expectOkDelegateResult = (
-  result: ParsedTransactionResult,
-  expectedResult: {
-    lockAmount: number;
-    stacker: string;
-    unlockBurnHeight: number;
-  }
-) => {
-  expect(result.result).toBeOk(
-    Cl.tuple({
-      "lock-amount": Cl.uint(expectedResult.lockAmount),
-      stacker: Cl.principal(expectedResult.stacker),
-      "unlock-burn-height": Cl.uint(expectedResult.unlockBurnHeight),
-    })
-  );
-};
 describe(POX_POOL_SELF_SERVICE_CONTRACT_NAME, () => {
   it("Ensure that users can delegate", () => {
     let block = simnet.mineBlock([
@@ -50,12 +34,12 @@ describe(POX_POOL_SELF_SERVICE_CONTRACT_NAME, () => {
     expectOkTrue(block, "pox-4", "allow-contract-caller", 0);
     expectOkTrue(block, "pox-4", "allow-contract-caller", 1);
 
-    expectOkDelegateResult(block[2], {
+    expectOkLockingResult(block[2], {
       lockAmount: 19_999_999_000_100,
       stacker: wallet_1,
       unlockBurnHeight: 2100,
     });
-    expectOkDelegateResult(block[3], {
+    expectOkLockingResult(block[3], {
       lockAmount: 1_100_000,
       stacker: wallet_2,
       unlockBurnHeight: 2100,
@@ -78,12 +62,11 @@ describe(POX_POOL_SELF_SERVICE_CONTRACT_NAME, () => {
     ]);
 
     expectOkTrue(block, "pox-4", "allow-contract-caller", 0);
-    expectOkDelegateResult(block[1], {
+    expectOkLockingResult(block[1], {
       lockAmount: 1_000_000,
       stacker: wallet_1,
       unlockBurnHeight: 2100,
     });
-    console.log(block[1].events);
 
     expectPartialStackedByCycle(poxAddrFP, 1, 1_000_000, deployer);
     expectTotalStackedByCycle(1, 0, undefined, deployer);
@@ -92,7 +75,7 @@ describe(POX_POOL_SELF_SERVICE_CONTRACT_NAME, () => {
 
     // increase delegation to 3 stx for cycle 2
     block = simnet.mineBlock([delegateStx(3_000_000, wallet_1)]);
-    expectOkDelegateResult(block[0], {
+    expectOkLockingResult(block[0], {
       lockAmount: 2_000_000,
       stacker: wallet_1,
       unlockBurnHeight: 3150,
@@ -108,7 +91,7 @@ describe(POX_POOL_SELF_SERVICE_CONTRACT_NAME, () => {
     ]);
 
     expectOkTrue(block, "pox-4", "allow-contract-caller", 0);
-    expectOkDelegateResult(block[1], {
+    expectOkLockingResult(block[1], {
       lockAmount: 1_000_000,
       stacker: wallet_1,
       unlockBurnHeight: 2100,
@@ -128,7 +111,7 @@ describe(POX_POOL_SELF_SERVICE_CONTRACT_NAME, () => {
     // extend to cycle 2
     block = simnet.mineBlock([delegateStackStx(wallet_1, wallet_2)]);
     expectPartialStackedByCycle(poxAddrFP, 2, 1_000_000, deployer);
-    expectOkDelegateResult(block[0], {
+    expectOkLockingResult(block[0], {
       lockAmount: 1_000_000,
       stacker: wallet_1,
       unlockBurnHeight: 3150,

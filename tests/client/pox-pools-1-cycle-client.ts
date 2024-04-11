@@ -1,8 +1,20 @@
 import { tx } from "@hirosystems/clarinet-sdk";
-import { Cl, ResponseOkCV, TupleCV, UIntCV } from "@stacks/transactions";
+import {
+  Cl,
+  ClarityType,
+  ClarityValue,
+  ResponseOkCV,
+  TupleCV,
+  UIntCV,
+} from "@stacks/transactions";
 import { poxAddrCV } from "./pox-4-client";
+import { expect } from "vitest";
 
 export const POX_POOLS_1_CYCLE_CONTRACT_NAME = "pox-pools-1-cycle-v2";
+export const poxPools1CycleContract =
+  simnet.getAccounts().get("deployer")!! +
+  "." +
+  POX_POOLS_1_CYCLE_CONTRACT_NAME;
 
 export function poxDelegationAllowContractCaller(
   contractCaller: string,
@@ -50,7 +62,7 @@ export function delegateStackStx(
   poolOperator: string
 ) {
   return tx.callPublicFn(
-    "pox-pools-1-cycle-v2",
+    POX_POOLS_1_CYCLE_CONTRACT_NAME,
     "delegate-stack-stx",
     [
       Cl.list(
@@ -76,7 +88,7 @@ export function delegateStackStxSimple(
   poolOperator: string
 ) {
   return tx.callPublicFn(
-    "pox-pools-1-cycle-v2",
+    POX_POOLS_1_CYCLE_CONTRACT_NAME,
     "delegate-stack-stx-simple",
     [
       Cl.list(members.map((u) => Cl.principal(u))),
@@ -92,7 +104,7 @@ export function getStatusListsLastIndex(
   user: string
 ) {
   return simnet.callReadOnlyFn(
-    "pox-pools-1-cycle-v2",
+    POX_POOLS_1_CYCLE_CONTRACT_NAME,
     "get-status-lists-last-index",
     [Cl.principal(poolAddress), Cl.uint(cycle)],
     user
@@ -106,7 +118,7 @@ export function getStatusList(
   user: string
 ) {
   return simnet.callReadOnlyFn(
-    "pox-pools-1-cycle-v2",
+    POX_POOLS_1_CYCLE_CONTRACT_NAME,
     "get-status-list",
     [Cl.principal(poolAddress), Cl.uint(cycle), Cl.uint(index)],
     user
@@ -115,7 +127,7 @@ export function getStatusList(
 
 export function getTotal(poolAddress: string, cycle: number, user: string) {
   return simnet.callReadOnlyFn(
-    "pox-pools-1-cycle-v2",
+    POX_POOLS_1_CYCLE_CONTRACT_NAME,
     "get-total",
     [Cl.principal(poolAddress), Cl.uint(cycle)],
     user
@@ -138,16 +150,45 @@ export function getStatus(
   user: string
 ) {
   return simnet.callReadOnlyFn(
-    "pox-pools-1-cycle-v2",
+    POX_POOLS_1_CYCLE_CONTRACT_NAME,
     "get-status",
     [Cl.principal(poolAddress), Cl.principal(userAddress), Cl.uint(cycle)],
     user
   );
 }
 
+export function expectOkStatus(
+  result: ClarityValue,
+  expectedStatus: {
+    stackerInfo: {
+      firstRewardCycle: number;
+    };
+    userInfo: {
+      hashbytes: string;
+      version: string;
+      cycle: number;
+      total: number;
+    };
+  }
+) {
+  expect(result).toHaveClarityType(ClarityType.ResponseOk);
+  let info = (result as StatusResponseOKCV).value.data;
+  expect(info["stacker-info"].data["first-reward-cycle"]).toBeUint(
+    expectedStatus.stackerInfo.firstRewardCycle
+  );
+  expect(info["user-info"].data.cycle).toBeUint(expectedStatus.userInfo.cycle);
+  expect(info["user-info"].data["pox-addr"]).toBeTuple(
+    poxAddrCV({
+      hashbytes: expectedStatus.userInfo.hashbytes,
+      version: expectedStatus.userInfo.version,
+    }).data
+  );
+  expect(info["total"]).toBeUint(expectedStatus.userInfo.total);
+}
+
 export function getUserData(userAddress: string, user: string) {
   return simnet.callReadOnlyFn(
-    "pox-pools-1-cycle-v2",
+    POX_POOLS_1_CYCLE_CONTRACT_NAME,
     "get-user-data",
     [Cl.principal(userAddress)],
     user
@@ -160,7 +201,7 @@ export function getNotLockedForCycle(
   user: string
 ) {
   return simnet.callReadOnlyFn(
-    "pox-pools-1-cycle-v2",
+    POX_POOLS_1_CYCLE_CONTRACT_NAME,
     "not-locked-for-cycle",
     [Cl.uint(unlockHeight), Cl.uint(cycleId)],
     user

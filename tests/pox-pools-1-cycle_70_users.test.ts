@@ -11,6 +11,7 @@ import {
   delegateStackStx,
   delegateStx,
   getTotal,
+  poxPools1CycleContract,
 } from "./client/pox-pools-1-cycle-client.ts";
 import { btcAddrWallet1 } from "./constants.ts";
 import { TransactionVersion } from "@stacks/common";
@@ -46,7 +47,6 @@ const accounts = simnet.getAccounts();
 const deployer = accounts.get("deployer")!;
 const faucet = accounts.get("faucet")!;
 const wallet_1 = accounts.get("wallet_1")!;
-const poxPools1CycleContract = deployer + "." + POX_POOLS_1_CYCLE_CONTRACT_NAME;
 
 describe("70 users", () => {
   it("pool operator can lock 30 users in batches", () => {
@@ -159,7 +159,9 @@ describe("70 users", () => {
         deployer
       ),
     ]);
-    block.map((r: any) => expect(r.result.type).toBe(ClarityType.ResponseOk));
+    block.map((r: any) =>
+      expect(r.result).toHaveClarityType(ClarityType.ResponseOk)
+    );
 
     // verify total
     const total = getTotal(deployer, 1, deployer);

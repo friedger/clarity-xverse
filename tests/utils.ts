@@ -1,10 +1,11 @@
-import { Cl } from "@stacks/transactions";
+import { Cl, ClarityValue } from "@stacks/transactions";
 import { expect } from "vitest";
 import {
   getPartialStackedByCycle,
   getRewardSetPoxAddress,
 } from "./client/pox-4-client.js";
 import { poxPoolsSelfServiceContract } from "./client/pox-pool-self-service-client.js";
+import { ParsedTransactionResult } from "@hirosystems/clarinet-sdk";
 
 export function expectPartialStackedByCycle(
   poxAddr: { version: string; hashbytes: string },
@@ -40,3 +41,24 @@ export function expectTotalStackedByCycle(
     expect(result).toBeNone();
   }
 }
+
+export const expectOkLockingResult = (
+  result: ClarityValue | ParsedTransactionResult,
+  expectedResult: {
+    lockAmount: number;
+    stacker: string;
+    unlockBurnHeight: number;
+  }
+) => {
+  expect(
+    (result as ParsedTransactionResult).result
+      ? (result as ParsedTransactionResult).result
+      : (result as ClarityValue)
+  ).toBeOk(
+    Cl.tuple({
+      "lock-amount": Cl.uint(expectedResult.lockAmount),
+      stacker: Cl.principal(expectedResult.stacker),
+      "unlock-burn-height": Cl.uint(expectedResult.unlockBurnHeight),
+    })
+  );
+};

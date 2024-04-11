@@ -12,6 +12,7 @@ import {
   POX_POOLS_1_CYCLE_CONTRACT_NAME,
   delegateStackStx,
   delegateStx,
+  poxPools1CycleContract,
 } from "./client/pox-pools-1-cycle-client.ts";
 import { Errors, PoxErrors, poxAddrPool1 } from "./constants.ts";
 
@@ -19,8 +20,6 @@ const accounts = simnet.getAccounts();
 const deployer = accounts.get("deployer")!;
 const wallet_1 = accounts.get("wallet_1")!;
 const wallet_2 = accounts.get("wallet_2")!;
-
-const poxPools1CycleContract = deployer + "." + POX_POOLS_1_CYCLE_CONTRACT_NAME;
 
 describe(POX_POOLS_1_CYCLE_CONTRACT_NAME, () => {
   it("Ensure that user can't lock stx", () => {
@@ -56,7 +55,6 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME, () => {
     ]);
 
     expect(block[0].result).toBeOk(Cl.bool(true));
-    console.log(cvToString(block[1].result));
     expect(block[1].result).toBeOk(Cl.bool(true));
     // verify delegate-stack-stx by wallet 2
     expect(block[2].result).toBeOk(
@@ -107,7 +105,7 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME, () => {
 
     expect(block[0].result).toBeOk(Cl.bool(true));
     // verify delegate-stack-stx by wallet 2
-    expect(block[1].result.type).toBe(ClarityType.ResponseOk);
+    expect(block[1].result).toHaveClarityType(ClarityType.ResponseOk);
     let lockingInfoList = (block[1].result as ResponseOkCV<ListCV<ResponseCV>>)
       .value.list;
     expect(lockingInfoList[0]).toBeErr(Cl.uint(Errors.NotFound));

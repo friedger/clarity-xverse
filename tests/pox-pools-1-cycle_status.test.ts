@@ -21,9 +21,11 @@ import {
   StatusResponseOKCV,
   delegateStackStx,
   delegateStx,
+  expectOkStatus,
   getNotLockedForCycle,
   getStatus,
   getUserData,
+  poxPools1CycleContract,
 } from "./client/pox-pools-1-cycle-client.ts";
 import {
   Errors,
@@ -44,7 +46,6 @@ let wallet_1 = accounts.get("wallet_1")!;
 let wallet_2 = accounts.get("wallet_2")!;
 let pool_1 = accounts.get("deployer")!;
 let pool_2 = accounts.get("wallet_8")!;
-const poxPools1CycleContract = pool_1 + "." + POX_POOLS_1_CYCLE_CONTRACT_NAME;
 
 describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Status", () => {
   it("Ensure that getStatus returns correct values", () => {
@@ -126,8 +127,8 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Status", () => {
     response = getStatus(pool_1, wallet_1, 1, wallet_1);
     expect(response.result).toBeOk(expect.anything());
     let info = (response.result as StatusResponseOKCV).value.data;
-    expect(info["stacker-info"].type).toBe(ClarityType.Tuple);
-    expect(info["user-info"].type).toBe(ClarityType.Tuple);
+    expect(info["stacker-info"]).toHaveClarityType(ClarityType.Tuple);
+    expect(info["user-info"]).toHaveClarityType(ClarityType.Tuple);
     expect(info["total"]).toBeUint(100_000_000);
 
     response = getUserData(wallet_1, wallet_1);
@@ -157,7 +158,7 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Status", () => {
     const rewardCycle = 1;
     const privateKey =
       "753b7cc01a1a2e86221266a154af739463fce51219d97e4f856cd7200c3bd2a601";
-
+    const signerKey = publicKeyToString(pubKeyfromPrivKey(privateKey));
     block = simnet.mineBlock([
       stackAggregationCommitIndexed(
         poxAddrPool1,
@@ -176,7 +177,7 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Status", () => {
           rewardCycle,
           privateKey: createStacksPrivateKey(privateKey),
         }),
-        publicKeyToString(pubKeyfromPrivKey(privateKey)),
+        signerKey,
         maxAmount,
         authId,
         pool_1
@@ -185,11 +186,15 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Status", () => {
     expect(block[0].result).toBeErr(Cl.int(PoxErrors.StackingThresholdNotMet));
 
     response = getStatus(pool_1, wallet_1, 1, wallet_1);
-    expect(response.result).toBeOk(expect.anything());
-    info = (response.result as StatusResponseOKCV).value.data;
-    expect(info["stacker-info"].type).toBe(ClarityType.Tuple);
-    expect(info["user-info"].type).toBe(ClarityType.Tuple);
-    expect(info["total"]).toBeUint(100_000_000);
+    expectOkStatus(response.result, {
+      stackerInfo: { firstRewardCycle: 1 },
+      userInfo: {
+        cycle: 0,
+        hashbytes: btcAddrWallet1.hashbytes,
+        version: btcAddrWallet1.version,
+        total: 100_000_000,
+      },
+    });
 
     response = getUserData(wallet_1, wallet_1);
     expect(response.result).toBeSome(
@@ -206,7 +211,15 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Status", () => {
     response = getStatus(pool_2, wallet_1, 1, wallet_1);
     expect(response.result).toBeOk(expect.anything());
     info = (response.result as StatusResponseOKCV).value.data;
-    expect(info["total"]).toBeUint(0);
+    expectOkStatus(response.result, {
+      stackerInfo: { firstRewardCycle: 1 },
+      userInfo: {
+        cycle: 0,
+        hashbytes: btcAddrWallet1.hashbytes,
+        version: btcAddrWallet1.version,
+        total: 0, // total is 0
+      },
+    });
 
     response = getUserData(wallet_1, wallet_1);
     expect(response.result).toBeSome(

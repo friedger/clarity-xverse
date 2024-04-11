@@ -80,12 +80,24 @@ export function stackAggregationIncrease(
   poxAddr: { version: string; hashbytes: string },
   cycle: number,
   poxAddrIndex: number,
+  signature: string,
+  signerKey: string,
+  maxAmount: number,
+  authId: number,
   poolOperator: string
 ) {
   return tx.callPublicFn(
     "ST000000000000000000002AMW42H.pox-4",
     "stack-aggregation-increase",
-    [poxAddrCV(poxAddr), Cl.uint(cycle), Cl.uint(poxAddrIndex)],
+    [
+      poxAddrCV(poxAddr),
+      Cl.uint(cycle),
+      Cl.uint(poxAddrIndex),
+      signature ? Cl.some(Cl.bufferFromHex(signature)) : Cl.none(),
+      Cl.bufferFromHex(signerKey),
+      Cl.uint(maxAmount),
+      Cl.uint(authId),
+    ],
     poolOperator
   );
 }
@@ -137,7 +149,7 @@ export function getPoxInfo(user: string) {
 
 export function asyncExpectCurrentCycle(cycle: number) {
   const poxInfoResponse = getPoxInfo(user.address);
-  expect(poxInfoResponse.result.type).toBe(ClarityType.ResponseOk);
+  expect(poxInfoResponse.result).toHaveClarityType(ClarityType.ResponseOk);
 
   const poxInfo = (
     poxInfoResponse.result as ResponseOkCV<
@@ -149,8 +161,7 @@ export function asyncExpectCurrentCycle(cycle: number) {
 
 export function getCycleLength() {
   const poxInfoResponse = getPoxInfo(user.address);
-  expect(poxInfoResponse.result.type).toBe(ClarityType.ResponseOk);
-  console.log(cvToString(poxInfoResponse.result));
+  expect(poxInfoResponse.result).toHaveClarityType(ClarityType.ResponseOk);
 
   const CYCLE = 1050;
   const PREPARE_CYCLE_LENGTH = 50;
