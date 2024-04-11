@@ -125,11 +125,15 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Status", () => {
     );
 
     response = getStatus(pool_1, wallet_1, 1, wallet_1);
-    expect(response.result).toBeOk(expect.anything());
-    let info = (response.result as StatusResponseOKCV).value.data;
-    expect(info["stacker-info"]).toHaveClarityType(ClarityType.Tuple);
-    expect(info["user-info"]).toHaveClarityType(ClarityType.Tuple);
-    expect(info["total"]).toBeUint(100_000_000);
+    expectOkStatus(response.result, {
+      stackerInfo: { firstRewardCycle: 1 },
+      userInfo: {
+        cycle: 0,
+        hashbytes: btcAddrWallet1.hashbytes,
+        version: btcAddrWallet1.version,
+        total: 100_000_000,
+      },
+    });
 
     response = getUserData(wallet_1, wallet_1);
     expect(response.result).toBeSome(
@@ -209,8 +213,6 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Status", () => {
 
     // get status with wrong pool address
     response = getStatus(pool_2, wallet_1, 1, wallet_1);
-    expect(response.result).toBeOk(expect.anything());
-    info = (response.result as StatusResponseOKCV).value.data;
     expectOkStatus(response.result, {
       stackerInfo: { firstRewardCycle: 1 },
       userInfo: {

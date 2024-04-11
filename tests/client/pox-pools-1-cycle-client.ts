@@ -3,6 +3,8 @@ import {
   Cl,
   ClarityType,
   ClarityValue,
+  ListCV,
+  OptionalCV,
   ResponseOkCV,
   TupleCV,
   UIntCV,
@@ -123,6 +125,13 @@ export function getStatusList(
     [Cl.principal(poolAddress), Cl.uint(cycle), Cl.uint(index)],
     user
   );
+}
+
+export function expectStatusListNone(result: ClarityValue) {
+  let statusList = result as TupleCV<{
+    "status-list": OptionalCV<ListCV>;
+  }>;
+  expect(statusList.data["status-list"]).toBeNone();
 }
 
 export function getTotal(poolAddress: string, cycle: number, user: string) {

@@ -12,6 +12,7 @@ import {
   delegateStackStx,
   delegateStx,
   expectOkStatus,
+  expectStatusListNone,
   getStatus,
   getStatusList,
   getStatusListsLastIndex,
@@ -129,7 +130,6 @@ function delegateAndDelegateStx({ samePoxAddr }: { samePoxAddr: boolean }) {
 
   expect(block[7].result).toHaveClarityType(ClarityType.ResponseOk);
   lockingInfoList = (block[7].result as ResponseOkCV<ListCV>).value.list;
-
   expectOkLockingResult(lockingInfoList[0], {
     lockAmount: 10_000_000_000_000,
     stacker: wallet_2,
@@ -138,7 +138,7 @@ function delegateAndDelegateStx({ samePoxAddr }: { samePoxAddr: boolean }) {
 }
 
 describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " many", () => {
-  it.only("Ensure that users can delegate to two different pools using the same pox btc reward address.", () => {
+  it("Ensure that users can delegate to two different pools using the same pox btc reward address.", () => {
     delegateAndDelegateStx({ samePoxAddr: true });
 
     // commit for cycle 1
@@ -199,9 +199,9 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " many", () => {
         pool_2
       ),
     ]);
+
     // verify that pox-addr-index = 0
     expect(block[0].result).toBeOk(Cl.uint(0));
-    console.log(block[1]);
     expect(block[1].result).toBeOk(Cl.bool(true));
 
     // verify status for users with locking period 1
@@ -233,9 +233,8 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " many", () => {
     );
 
     // verify user status
-    response = getStatus(pool_1, wallet_1, 2, deployer);
+    response = getStatus(pool_1, wallet_1, 1, deployer);
 
-    console.log(cvToString(response.result));
     expectOkStatus(response.result, {
       stackerInfo: { firstRewardCycle: 1 },
       userInfo: {
@@ -246,14 +245,14 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " many", () => {
       },
     });
 
-    response = getStatus(pool_2, wallet_2, 2, deployer);
+    response = getStatus(pool_2, wallet_2, 1, deployer);
 
     expectOkStatus(response.result, {
       stackerInfo: { firstRewardCycle: 1 },
       userInfo: {
         cycle: 0,
-        hashbytes: btcAddrWallet1.hashbytes,
-        version: btcAddrWallet1.version,
+        hashbytes: btcAddrWallet2.hashbytes,
+        version: btcAddrWallet2.version,
         total: 10_000_000_000_000,
       },
     });
@@ -271,8 +270,8 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " many", () => {
     let signerKey = publicKeyToString(pubKeyfromPrivKey(privateKey));
 
     let poxAddress = poxAddressToBtcAddress(
-      hexToBytes(btcAddrWallet1.version.substring(2))[0],
-      hexToBytes(btcAddrWallet1.hashbytes.substring(2)),
+      hexToBytes(poxAddrPool1.version.substring(2))[0],
+      hexToBytes(poxAddrPool1.hashbytes.substring(2)),
       "testnet"
     );
     let authId = 1;
@@ -298,11 +297,15 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " many", () => {
     ]);
 
     // verify that pox-addr-index = 0 for pool 1
-    console.log(cvToString(block[0].result));
     expect(block[0].result).toBeOk(Cl.uint(0));
 
     // commit pool 2
     authId = 2;
+    poxAddress = poxAddressToBtcAddress(
+      hexToBytes(poxAddrPool2.version.substring(2))[0],
+      hexToBytes(poxAddrPool2.hashbytes.substring(2)),
+      "testnet"
+    );
     block = simnet.mineBlock([
       stackAggregationCommitIndexed(
         poxAddrPool2,
@@ -347,32 +350,27 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " many", () => {
     // verify that information are based on delegate-stx call only
     // there is always only one entry
     response = getStatusList(pool_2, 2, 0, deployer);
-    statusList = response.result as TupleCV<{
-      "status-list": OptionalCV<ListCV>;
-    }>;
-    expect(statusList.data["status-list"]).toHaveClarityType(
-      ClarityType.OptionalNone
-    );
+    expectStatusListNone(response.result);
 
     // verify user status
-    response = getStatus(pool_1, wallet_1, 2, deployer);
+    response = getStatus(pool_1, wallet_1, 1, deployer);
     expectOkStatus(response.result, {
       stackerInfo: { firstRewardCycle: 1 },
       userInfo: {
         cycle: 0,
-        hashbytes: "000102030405060708090a0b0c0d0e0f00010203",
-        version: "01",
+        hashbytes: btcAddrWallet1.hashbytes,
+        version: btcAddrWallet1.version,
         total: 10_000_000_000_000,
       },
     });
 
-    response = getStatus(pool_2, wallet_2, 2, deployer);
+    response = getStatus(pool_2, wallet_2, 1, deployer);
     expectOkStatus(response.result, {
       stackerInfo: { firstRewardCycle: 1 },
       userInfo: {
         cycle: 0,
-        hashbytes: "00102030405060708090a0b0c0d0e0f000102030",
-        version: "01",
+        hashbytes: btcAddrWallet2.hashbytes,
+        version: btcAddrWallet2.version,
         total: 10_000_000_000_000,
       },
     });
