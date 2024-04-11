@@ -155,9 +155,9 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Status", () => {
     const maxAmount = 100_000_000;
     const period = 1;
     const rewardCycle = 1;
-    const privateKey = createStacksPrivateKey(
-      "753b7cc01a1a2e86221266a154af739463fce51219d97e4f856cd7200c3bd2a601"
-    );
+    const privateKey =
+      "753b7cc01a1a2e86221266a154af739463fce51219d97e4f856cd7200c3bd2a601";
+
     block = simnet.mineBlock([
       stackAggregationCommitIndexed(
         poxAddrPool1,
@@ -174,13 +174,9 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Status", () => {
             "testnet"
           ),
           rewardCycle,
-          privateKey,
+          privateKey: createStacksPrivateKey(privateKey),
         }),
-        publicKeyToString(
-          pubKeyfromPrivKey(
-            "753b7cc01a1a2e86221266a154af739463fce51219d97e4f856cd7200c3bd2a601"
-          )
-        ),
+        publicKeyToString(pubKeyfromPrivKey(privateKey)),
         maxAmount,
         authId,
         pool_1

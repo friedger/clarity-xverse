@@ -1,28 +1,29 @@
-import { Account, Chain } from "./deps.ts";
+import { Cl } from "@stacks/transactions";
+import { expect } from "vitest";
 import {
   getPartialStackedByCycle,
   getRewardSetPoxAddress,
 } from "./client/pox-4-client.js";
-import { poxAddrPool1 } from "./constants.ts";
+import { poxPoolsSelfServiceContract } from "./client/pox-pool-self-service-client.js";
 
 export function expectPartialStackedByCycle(
   poxAddr: { version: string; hashbytes: string },
   cycle: number,
   amountUstx: number | undefined,
-  chain: Chain,
-  deployer: Account
+  deployer: string
 ) {
   const result = getPartialStackedByCycle(
     poxAddr,
     cycle,
-    `${deployer.address}.pox-pool-self-service`,
-    chain,
+    poxPoolsSelfServiceContract,
     deployer
   ).result;
   if (amountUstx) {
-    result.expectSome().expectTuple()["stacked-amount"].expectUint(amountUstx);
+    expect(result).toBeSome(
+      Cl.tuple({ "stacked-amount": Cl.uint(amountUstx) })
+    );
   } else {
-    result.expectNone();
+    expect(result).toBeNone();
   }
 }
 
@@ -30,13 +31,12 @@ export function expectTotalStackedByCycle(
   cycle: number,
   index: number,
   amountUstx: number | undefined,
-  chain: Chain,
-  user: Account
+  user: string
 ) {
-  const result = getRewardSetPoxAddress(cycle, index, chain, user).result;
+  const result = getRewardSetPoxAddress(cycle, index, user).result;
   if (amountUstx) {
-    result.expectSome().expectTuple()["total-ustx"].expectUint(amountUstx);
+    expect(result).toBeSome(Cl.tuple({ "total-ustx": Cl.uint(amountUstx) }));
   } else {
-    result.expectNone();
+    expect(result).toBeNone();
   }
 }

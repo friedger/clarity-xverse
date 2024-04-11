@@ -1,20 +1,30 @@
+import {
+  Cl,
+  ClarityType,
+  StacksPrivateKey,
+  getAddressFromPrivateKey,
+  makeRandomPrivKey,
+} from "@stacks/transactions";
 import { allowContractCaller } from "./client/pox-4-client.js";
 import {
+  POX_POOLS_1_CYCLE_CONTRACT_NAME,
   delegateStackStx,
   delegateStx,
   getTotal,
 } from "./client/pox-pools-1-cycle-client.ts";
-import { Clarinet, Tx, Chain, Account, types } from "./deps.ts";
 import { btcAddrWallet1 } from "./constants.ts";
-import {
-  StacksPrivateKey,
-  makeRandomPrivKey,
-  getAddressFromPrivateKey,
-  TransactionVersion,
-} from "https://esm.sh/@stacks/transactions";
+import { TransactionVersion } from "@stacks/common";
+import { describe, expect, it } from "vitest";
+import { tx } from "@hirosystems/clarinet-sdk";
+import { expectOkTrue } from "@stacks/clarunit/src/parser/test-helpers.ts";
 
 function generateWallets(count: number) {
-  const users: Account[] = [];
+  const users: {
+    address: string;
+    name: string;
+    balanace: 0;
+  }[] = [];
+
   let privateKey: StacksPrivateKey;
   let address: string;
   for (let index = 0; index < count; index++) {
@@ -32,58 +42,57 @@ function generateWallets(count: number) {
   return users;
 }
 
-Clarinet.test({
-  name: "Ensure that pool operator can lock 30 users",
-  async fn(chain: Chain, accounts: Map<string, Account>) {
-    const deployer = accounts.get("deployer")!;
-    const faucet = accounts.get("faucet")!;
-    const wallet_1 = accounts.get("wallet_1")!;
-    const poxPools1CycleContract = deployer.address + ".pox-pools-1-cycle";
+const accounts = simnet.getAccounts();
+const deployer = accounts.get("deployer")!;
+const faucet = accounts.get("faucet")!;
+const wallet_1 = accounts.get("wallet_1")!;
+const poxPools1CycleContract = deployer + "." + POX_POOLS_1_CYCLE_CONTRACT_NAME;
+
+describe("70 users", () => {
+  it("pool operator can lock 30 users in batches", () => {
     const amountUstx = 1_000_000;
 
     const users = generateWallets(70);
     // fill from faucet
-    let block = chain.mineBlock(
-      users.map((user) =>
-        Tx.transferSTX(amountUstx, user.address, faucet.address)
-      )
+    let block = simnet.mineBlock(
+      users.map((user) => tx.transferSTX(amountUstx, user.address, faucet))
     );
-    block.receipts.map((r: any) => r.result.expectOk().expectBool(true));
+    block.map((r: any) => expect(r.result).toBeOk(Cl.bool(true)));
 
     // allow contract caller
-    block = chain.mineBlock(
+    block = simnet.mineBlock(
       users.map((user) =>
-        allowContractCaller(poxPools1CycleContract, undefined, user)
+        allowContractCaller(poxPools1CycleContract, undefined, user.address)
       )
     );
-    block.receipts.map((r: any) => r.result.expectOk().expectBool(true));
+    block.map((r: any) => expect(r.result).toBeOk(Cl.bool(true)));
 
     // allow contract caller pool operator and whale
-    chain.mineBlock([
+    simnet.mineBlock([
       allowContractCaller(poxPools1CycleContract, undefined, deployer),
       allowContractCaller(poxPools1CycleContract, undefined, wallet_1),
     ]);
 
     // delegate all users
-    block = chain.mineBlock(
+    block = simnet.mineBlock(
       users.map((user) =>
         delegateStx(
           amountUstx,
-          deployer.address,
+          deployer,
           undefined,
           undefined,
           btcAddrWallet1,
-          user
+          user.address
         )
       )
     );
-    block.receipts.map((r: any) => r.result.expectOk().expectBool(true));
+    block.map((r: any) => expect(r.result).toBeOk(Cl.bool(true)));
 
     // delegate whale
-    block = chain.mineBlock([
+    block = simnet.mineBlock([
       delegateStx(
         10_000_000_000_000,
-        deployer.address,
+        deployer,
         undefined,
         undefined,
         btcAddrWallet1,
@@ -92,11 +101,11 @@ Clarinet.test({
     ]);
 
     // delegate stack stx
-    block = chain.mineBlock([
+    block = simnet.mineBlock([
       delegateStackStx(
         users.slice(0, 30).map((user) => {
           return {
-            user,
+            user: user.address,
             amountUstx,
           };
         }),
@@ -110,7 +119,7 @@ Clarinet.test({
       delegateStackStx(
         users.slice(30, 60).map((user) => {
           return {
-            user,
+            user: user.address,
             amountUstx,
           };
         }),
@@ -124,7 +133,7 @@ Clarinet.test({
       delegateStackStx(
         users.slice(60).map((user) => {
           return {
-            user,
+            user: user.address,
             amountUstx,
           };
         }),
@@ -150,10 +159,10 @@ Clarinet.test({
         deployer
       ),
     ]);
-    block.receipts.map((r: any) => r.result.expectOk());
+    block.map((r: any) => expect(r.result.type).toBe(ClarityType.ResponseOk));
 
     // verify total
-    const total = getTotal(deployer.address, 1, chain, deployer);
-    total.result.expectUint(10_000_070_000_000);
-  },
+    const total = getTotal(deployer, 1, deployer);
+    expect(total.result).toBeUint(10_000_070_000_000);
+  });
 });

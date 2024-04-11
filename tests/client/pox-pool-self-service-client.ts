@@ -1,89 +1,97 @@
-import { Chain, Tx, types, Account } from "../deps.ts";
+import { tx } from "@hirosystems/clarinet-sdk";
+import { Cl } from "@stacks/transactions";
+import { poxAddrCV } from "./pox-4-client";
+
+export const POX_POOL_SELF_SERVICE_CONTRACT_NAME = "pox-pool-self-service-v2";
+export const poxPoolsSelfServiceContract =
+  simnet.getAccounts().get("deployer")!! +
+  "." +
+  POX_POOL_SELF_SERVICE_CONTRACT_NAME;
 
 export function fpDelegationAllowContractCaller(
   contractCaller: string,
   untilBurnHt: number | undefined,
-  user: Account
+  user: string
 ) {
-  return Tx.contractCall(
-    "pox-pool-self-service",
+  return tx.callPublicFn(
+    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
     "allow-contract-caller",
     [
-      types.principal(contractCaller),
-      untilBurnHt ? types.some(types.uint(untilBurnHt)) : types.none(),
+      Cl.principal(contractCaller),
+      untilBurnHt ? Cl.some(Cl.uint(untilBurnHt)) : Cl.none(),
     ],
-    user.address
+    user
   );
 }
 
-export function delegateStx(amount: number, user: Account) {
-  return Tx.contractCall(
-    "pox-pool-self-service",
+export function delegateStx(amount: number, user: string) {
+  return tx.callPublicFn(
+    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
     "delegate-stx",
-    [types.uint(amount)],
-    user.address
+    [Cl.uint(amount)],
+    user
   );
 }
 
-export function delegateStackStx(stacker: Account, user: Account) {
-  return Tx.contractCall(
-    "pox-pool-self-service",
+export function delegateStackStx(stacker: string, user: string) {
+  return tx.callPublicFn(
+    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
     "delegate-stack-stx",
-    [types.principal(stacker.address)],
-    user.address
+    [Cl.principal(stacker)],
+    user
   );
 }
 
-export function delegateStackStxMany(stackers: Account[], user: Account) {
-  return Tx.contractCall(
-    "pox-pool-self-service",
+export function delegateStackStxMany(stackers: string[], user: string) {
+  return tx.callPublicFn(
+    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
     "delegate-stack-stx-many",
-    [types.list(stackers.map((s) => types.principal(s.address)))],
-    user.address
+    [Cl.list(stackers.map((s) => Cl.principal(s)))],
+    user
   );
 }
 
 // admin functions
 
-export function setActive(active: boolean, user: Account) {
-  return Tx.contractCall(
-    "pox-pool-self-service",
+export function setActive(active: boolean, user: string) {
+  return tx.callPublicFn(
+    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
     "set-active",
-    [types.bool(active)],
-    user.address
+    [Cl.bool(active)],
+    user
   );
 }
 
-export function setStxBuffer(amount: number, user: Account) {
-  return Tx.contractCall(
-    "pox-pool-self-service",
+export function setStxBuffer(amount: number, user: string) {
+  return tx.callPublicFn(
+    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
     "set-stx-buffer",
-    [types.uint(amount)],
-    user.address
+    [Cl.uint(amount)],
+    user
   );
 }
 
 export function setPoolPoxAddress(
   poxAddress: { hashbytes: string; version: string },
-  user: Account
+  user: string
 ) {
-  return Tx.contractCall(
-    "pox-pool-self-service",
+  return tx.callPublicFn(
+    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
     "set-pool-pox-address",
-    [types.tuple(poxAddress)],
-    user.address
+    [poxAddrCV(poxAddress)],
+    user
   );
 }
 
 export function setRewardAdmin(
   newAdmin: string,
   enable: boolean,
-  user: Account
+  user: string
 ) {
-  return Tx.contractCall(
-    "pox-pool-self-service",
+  return tx.callPublicFn(
+    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
     "set-reward-admin",
-    [types.principal(newAdmin), types.bool(enable)],
-    user.address
+    [Cl.principal(newAdmin), Cl.bool(enable)],
+    user
   );
 }

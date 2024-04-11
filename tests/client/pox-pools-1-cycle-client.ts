@@ -1,13 +1,6 @@
-import {
-  Cl,
-  ResponseCV,
-  ResponseErrorCV,
-  ResponseOkCV,
-  TupleCV,
-  UIntCV,
-} from "@stacks/transactions";
+import { tx } from "@hirosystems/clarinet-sdk";
+import { Cl, ResponseOkCV, TupleCV, UIntCV } from "@stacks/transactions";
 import { poxAddrCV } from "./pox-4-client";
-import { ParsedTransactionResult, tx } from "@hirosystems/clarinet-sdk";
 
 export const POX_POOLS_1_CYCLE_CONTRACT_NAME = "pox-pools-1-cycle-v2";
 

@@ -5,6 +5,7 @@ import {
   ResponseOkCV,
   TupleCV,
   UIntCV,
+  cvToString,
 } from "@stacks/transactions";
 import { expect } from "vitest";
 
@@ -104,7 +105,7 @@ export function getPartialStackedByCycle(
   poolAddress: string,
   user: string
 ) {
-  return tx.callPublicFn(
+  return simnet.callReadOnlyFn(
     "ST000000000000000000002AMW42H.pox-4",
     "get-partial-stacked-by-cycle",
     [poxAddrCV(poolPoxAddr), Cl.uint(cycle), Cl.principal(poolAddress)],
@@ -117,7 +118,7 @@ export function getRewardSetPoxAddress(
   index: number,
   user: string
 ) {
-  return tx.callPublicFn(
+  return simnet.callReadOnlyFn(
     "ST000000000000000000002AMW42H.pox-4",
     "get-reward-set-pox-address",
     [Cl.uint(cycle), Cl.uint(index)],
@@ -134,8 +135,8 @@ export function getPoxInfo(user: string) {
   );
 }
 
-export async function asyncExpectCurrentCycle(cycle: number) {
-  const poxInfoResponse = await getPoxInfo(user.address);
+export function asyncExpectCurrentCycle(cycle: number) {
+  const poxInfoResponse = getPoxInfo(user.address);
   expect(poxInfoResponse.result.type).toBe(ClarityType.ResponseOk);
 
   const poxInfo = (
@@ -146,19 +147,20 @@ export async function asyncExpectCurrentCycle(cycle: number) {
   expect(poxInfo["reward-cycle-id"]).toBeUint(cycle);
 }
 
-export async function getCycleLength() {
-  const poxInfoResponse = await getPoxInfo(user.address);
+export function getCycleLength() {
+  const poxInfoResponse = getPoxInfo(user.address);
   expect(poxInfoResponse.result.type).toBe(ClarityType.ResponseOk);
+  console.log(cvToString(poxInfoResponse.result));
 
   const CYCLE = 1050;
   const PREPARE_CYCLE_LENGTH = 50;
 
   const poxInfo = (
     poxInfoResponse.result as ResponseOkCV<
-      TupleCV<{ "reward-cycle-id": UIntCV; "prepare-cycle-length": UIntCV }>
+      TupleCV<{ "reward-cycle-length": UIntCV; "prepare-cycle-length": UIntCV }>
     >
   ).value.data;
-  expect(poxInfo["reward-cycle-id"]).toBeUint(CYCLE);
+  expect(poxInfo["reward-cycle-length"]).toBeUint(CYCLE);
   expect(poxInfo["prepare-cycle-length"]).toBeUint(PREPARE_CYCLE_LENGTH);
   return {
     CYCLE,
