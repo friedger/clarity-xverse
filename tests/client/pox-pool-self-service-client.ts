@@ -3,7 +3,7 @@ import { Cl } from "@stacks/transactions";
 import { poxAddrCV } from "./pox-4-client";
 
 export const POX_POOL_SELF_SERVICE_CONTRACT_NAME = "pox-pool-self-service-v2";
-export const poxPoolsSelfServiceContract =
+export const poxPoolSelfServiceContract =
   simnet.getAccounts().get("deployer")!! +
   "." +
   POX_POOL_SELF_SERVICE_CONTRACT_NAME;

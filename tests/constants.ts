@@ -46,5 +46,6 @@ export const FpErrors = {
   Forbidden: 403,
   TooEarly: 500,
   PoxAddressDeactivated: 504,
+  AlreadyStacking: 603,
   StackingPermissionDenied: 609,
 };

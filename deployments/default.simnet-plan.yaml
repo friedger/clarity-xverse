@@ -76,6 +76,11 @@ plan:
             path: contracts/pox-pools-1-cycle.clar
             clarity-version: 2
         - emulated-contract-publish:
+            contract-name: helper
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/testing/helper.clar
+            clarity-version: 2
+        - emulated-contract-publish:
             contract-name: pox-pools-1-cycle_flow_test
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: tests/pox-pools-1-cycle_flow_test.clar

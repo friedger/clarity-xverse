@@ -4,7 +4,7 @@ import {
   getPartialStackedByCycle,
   getRewardSetPoxAddress,
 } from "./client/pox-4-client.js";
-import { poxPoolsSelfServiceContract } from "./client/pox-pool-self-service-client.js";
+import { poxPoolSelfServiceContract } from "./client/pox-pool-self-service-client.js";
 import { ParsedTransactionResult } from "@hirosystems/clarinet-sdk";
 
 export function expectPartialStackedByCycle(
@@ -16,7 +16,7 @@ export function expectPartialStackedByCycle(
   const result = getPartialStackedByCycle(
     poxAddr,
     cycle,
-    poxPoolsSelfServiceContract,
+    poxPoolSelfServiceContract,
     deployer
   ).result;
   if (amountUstx) {

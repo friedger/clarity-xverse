@@ -1,14 +1,32 @@
 import { expectOkTrue } from "@stacks/clarunit/src/parser/test-helpers.ts";
+import { hexToBytes } from "@stacks/common";
+import { StacksTestnet } from "@stacks/network";
+import {
+  Pox4SignatureTopic,
+  poxAddressToBtcAddress,
+  signPox4SignatureHash,
+} from "@stacks/stacking";
+import {
+  Cl,
+  ClarityType,
+  ListCV,
+  OptionalCV,
+  ResponseOkCV,
+  SomeCV,
+  TupleCV,
+  createStacksPrivateKey,
+  pubKeyfromPrivKey,
+  publicKeyToString,
+} from "@stacks/transactions";
+import { describe, expect, it } from "vitest";
 import {
   allowContractCaller,
   getCycleLength,
-  poxAddrCV,
   stackAggregationCommitIndexed,
   stackAggregationIncrease,
 } from "./client/pox-4-client.js";
 import {
   POX_POOLS_1_CYCLE_CONTRACT_NAME,
-  StatusResponseOKCV,
   delegateStackStx,
   delegateStx,
   expectOkStatus,
@@ -24,30 +42,7 @@ import {
   poxAddrPool1,
   poxAddrPool2,
 } from "./constants.ts";
-import { describe, expect, it } from "vitest";
-import {
-  Cl,
-  ClarityType,
-  ListCV,
-  OptionalCV,
-  ResponseOkCV,
-  SomeCV,
-  TupleCV,
-  UIntCV,
-  createStacksPrivateKey,
-  createStacksPublicKey,
-  cvToString,
-  pubKeyfromPrivKey,
-  publicKeyToString,
-} from "@stacks/transactions";
 import { expectOkLockingResult } from "./utils.ts";
-import { hexToBytes } from "@stacks/common";
-import {
-  Pox4SignatureTopic,
-  poxAddressToBtcAddress,
-  signPox4SignatureHash,
-} from "@stacks/stacking";
-import { StacksTestnet } from "@stacks/network";
 
 const accounts = simnet.getAccounts();
 const deployer = accounts.get("deployer")!;

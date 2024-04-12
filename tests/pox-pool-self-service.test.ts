@@ -6,7 +6,7 @@ import {
   POX_POOL_SELF_SERVICE_CONTRACT_NAME,
   delegateStackStx,
   delegateStx,
-  poxPoolsSelfServiceContract,
+  poxPoolSelfServiceContract,
 } from "./client/pox-pool-self-service-client.ts";
 import { poxAddrFP } from "./constants.ts";
 import {
@@ -23,8 +23,8 @@ const wallet_2 = accounts.get("wallet_2")!;
 describe(POX_POOL_SELF_SERVICE_CONTRACT_NAME, () => {
   it("Ensure that users can delegate", () => {
     let block = simnet.mineBlock([
-      allowContractCaller(poxPoolsSelfServiceContract, undefined, wallet_1),
-      allowContractCaller(poxPoolsSelfServiceContract, undefined, wallet_2),
+      allowContractCaller(poxPoolSelfServiceContract, undefined, wallet_1),
+      allowContractCaller(poxPoolSelfServiceContract, undefined, wallet_2),
 
       delegateStx(20_000_000_000_100, wallet_1),
       delegateStx(2_100_000, wallet_2),
@@ -57,7 +57,7 @@ describe(POX_POOL_SELF_SERVICE_CONTRACT_NAME, () => {
 
     // delegate 2 stx for cycle 1
     let block = simnet.mineBlock([
-      allowContractCaller(poxPoolsSelfServiceContract, undefined, wallet_1),
+      allowContractCaller(poxPoolSelfServiceContract, undefined, wallet_1),
       delegateStx(2_000_000, wallet_1),
     ]);
 
@@ -86,7 +86,7 @@ describe(POX_POOL_SELF_SERVICE_CONTRACT_NAME, () => {
     const { CYCLE, HALF_CYCLE } = getCycleLength();
 
     let block = simnet.mineBlock([
-      allowContractCaller(poxPoolsSelfServiceContract, undefined, wallet_1),
+      allowContractCaller(poxPoolSelfServiceContract, undefined, wallet_1),
       delegateStx(2_000_000, wallet_1),
     ]);
 

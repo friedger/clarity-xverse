@@ -1,3 +1,5 @@
+import { tx } from "@hirosystems/clarinet-sdk";
+import { TransactionVersion } from "@stacks/common";
 import {
   Cl,
   ClarityType,
@@ -5,19 +7,15 @@ import {
   getAddressFromPrivateKey,
   makeRandomPrivKey,
 } from "@stacks/transactions";
+import { describe, expect, it } from "vitest";
 import { allowContractCaller } from "./client/pox-4-client.js";
 import {
-  POX_POOLS_1_CYCLE_CONTRACT_NAME,
   delegateStackStx,
   delegateStx,
   getTotal,
   poxPools1CycleContract,
 } from "./client/pox-pools-1-cycle-client.ts";
 import { btcAddrWallet1 } from "./constants.ts";
-import { TransactionVersion } from "@stacks/common";
-import { describe, expect, it } from "vitest";
-import { tx } from "@hirosystems/clarinet-sdk";
-import { expectOkTrue } from "@stacks/clarunit/src/parser/test-helpers.ts";
 
 function generateWallets(count: number) {
   const users: {

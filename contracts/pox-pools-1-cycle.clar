@@ -69,7 +69,8 @@
                  updated-list (map-set grouped-stackers stacker-key updated-list)
                  (insert-in-new-list pool reward-cycle last-index details))
       (map-insert grouped-stackers stacker-key (list details)))
-    (map-set grouped-totals {pool: pool, reward-cycle: reward-cycle} (+ (get-total pool reward-cycle) (get lock-amount details)))))
+    (map-set grouped-totals {pool: pool, reward-cycle: reward-cycle} 
+      (+ (get-total pool reward-cycle) (get lock-amount details)))))
 
 ;;
 ;; Helper functions for pox-4 calls
@@ -92,6 +93,7 @@
 
 ;; Calls pox-4 delegate-stack-extend and delegate-stack-increase.
 ;; parameter amount-ustx must be lower or equal the stx balance and the delegated amount
+;; returns the new unlock height and the new total locked stx amount
 (define-private (delegate-stack-extend-increase (user principal)
                   (amount-ustx uint)
                   (pox-address {hashbytes: (buff 32), version: (buff 1)}))
