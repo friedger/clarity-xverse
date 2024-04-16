@@ -9,7 +9,7 @@ import {
 import { describe, expect, it } from "vitest";
 import { allowContractCaller } from "./client/pox-4-client.js";
 import {
-  POX_POOLS_1_CYCLE_CONTRACT_NAME,
+  POX4_POOLS,
   delegateStackStx,
   delegateStx,
   poxPools1CycleContract,
@@ -21,7 +21,7 @@ const deployer = accounts.get("deployer")!;
 const wallet_1 = accounts.get("wallet_1")!;
 const wallet_2 = accounts.get("wallet_2")!;
 
-describe(POX_POOLS_1_CYCLE_CONTRACT_NAME, () => {
+describe(POX4_POOLS, () => {
   it("Ensure that user can't lock stx", () => {
     let block = simnet.mineBlock([
       allowContractCaller(poxPools1CycleContract, undefined, wallet_1),

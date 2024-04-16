@@ -23,7 +23,7 @@ import {
   stackAggregationCommitIndexed,
 } from "./client/pox-4-client.js";
 import {
-  POX_POOLS_1_CYCLE_CONTRACT_NAME,
+  POX4_POOLS,
   delegateStackStx,
   delegateStx,
   expectOkStatus,
@@ -45,7 +45,7 @@ let wallet_1 = accounts.get("wallet_1")!;
 let wallet_2 = accounts.get("wallet_2")!;
 let faucet = accounts.get("faucet")!;
 
-describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Flow", () => {
+describe(POX4_POOLS + " Flow", () => {
   it("Ensure that user can delegate and pool operator can lock stx and aggregate commit", () => {
     const { CYCLE } = getCycleLength();
 
@@ -94,8 +94,8 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Flow", () => {
     expectOkTrue(block, "pox-4", "allow-contract-caller", 1);
     expectOkTrue(block, "pox-4", "allow-contract-caller", 2);
     // verify results for delegate-stx calls
-    expectOkTrue(block, POX_POOLS_1_CYCLE_CONTRACT_NAME, "delegate-stx", 3);
-    expectOkTrue(block, POX_POOLS_1_CYCLE_CONTRACT_NAME, "delegate-stx", 4);
+    expectOkTrue(block, POX4_POOLS, "delegate-stx", 3);
+    expectOkTrue(block, POX4_POOLS, "delegate-stx", 4);
 
     // verify delegate-stack-stx call by pool operator
     let lockingInfoList = (block[5].result as ResponseOkCV<ListCV>).value.list;
@@ -181,8 +181,8 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Flow", () => {
     expectOkTrue(block, "pox-4", "allow-contract-caller", 1);
     expectOkTrue(block, "pox-4", "allow-contract-caller", 2);
     // verify results for delegate-stx calls
-    expectOkTrue(block, POX_POOLS_1_CYCLE_CONTRACT_NAME, "delegate-stx", 3);
-    expectOkTrue(block, POX_POOLS_1_CYCLE_CONTRACT_NAME, "delegate-stx", 4);
+    expectOkTrue(block, POX4_POOLS, "delegate-stx", 3);
+    expectOkTrue(block, POX4_POOLS, "delegate-stx", 4);
 
     // return tokens to faucet
     // wallet_1 balance = 0
@@ -277,8 +277,8 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Flow", () => {
     expectOkTrue(block, "pox-4", "allow-contract-caller", 1);
     expectOkTrue(block, "pox-4", "allow-contract-caller", 2);
     // verify results for delegate-stx calls
-    expectOkTrue(block, POX_POOLS_1_CYCLE_CONTRACT_NAME, "delegate-stx", 3);
-    expectOkTrue(block, POX_POOLS_1_CYCLE_CONTRACT_NAME, "delegate-stx", 4);
+    expectOkTrue(block, POX4_POOLS, "delegate-stx", 3);
+    expectOkTrue(block, POX4_POOLS, "delegate-stx", 4);
 
     // revoke
     block = simnet.mineBlock([revokeDelegateStx(wallet_1)]);
@@ -358,7 +358,7 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Flow", () => {
     expectOkTrue(block, "pox-4", "allow-contract-caller", 0);
     expectOkTrue(block, "pox-4", "allow-contract-caller", 1);
     // verify results for delegate-stx calls
-    expectOkTrue(block, POX_POOLS_1_CYCLE_CONTRACT_NAME, "delegate-stx", 2);
+    expectOkTrue(block, POX4_POOLS, "delegate-stx", 2);
     // verify delegate-stack-stx call by pool operator
     let lockingInfoList = (block[3].result as ResponseOkCV<ListCV>).value.list;
     expectOkLockingResult(lockingInfoList[0], {
@@ -377,7 +377,7 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Flow", () => {
         wallet_1
       ),
     ]);
-    expectOkTrue(block, POX_POOLS_1_CYCLE_CONTRACT_NAME, "delegate-stx", 0);
+    expectOkTrue(block, POX4_POOLS, "delegate-stx", 0);
 
     simnet.mineEmptyBlocks(CYCLE - 5);
 
@@ -425,7 +425,7 @@ describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Flow", () => {
 
     expect(
       simnet.callReadOnlyFn(
-        POX_POOLS_1_CYCLE_CONTRACT_NAME,
+        POX4_POOLS,
         "get-stx-account",
         [Cl.principal(wallet_1)],
         wallet_1

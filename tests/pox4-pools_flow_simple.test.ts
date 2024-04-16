@@ -3,7 +3,7 @@ import { Cl, ClarityType, ListCV, ResponseOkCV } from "@stacks/transactions";
 import { describe, expect, it } from "vitest";
 import { allowContractCaller } from "./client/pox-4-client.js";
 import {
-  POX_POOLS_1_CYCLE_CONTRACT_NAME,
+  POX4_POOLS,
   delegateStackStxSimple,
   delegateStx,
   poxPools1CycleContract,
@@ -16,7 +16,7 @@ let deployer = accounts.get("deployer")!;
 let wallet_1 = accounts.get("wallet_1")!;
 let wallet_2 = accounts.get("wallet_2")!;
 
-describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Simple flow", () => {
+describe(POX4_POOLS + " Simple flow", () => {
   it("Ensure that user can delegate and pool operator can lock stx without detailed amount", () => {
     let block = simnet.mineBlock([
       allowContractCaller(poxPools1CycleContract, undefined, deployer),

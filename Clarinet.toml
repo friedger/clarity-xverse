@@ -16,8 +16,8 @@ path = 'contracts/pox-pool-self-service.clar'
 clarity_version = 2
 epoch = 2.5
 
-[contracts.pox-pools-1-cycle-v2]
-path = 'contracts/pox-pools-1-cycle.clar'
+[contracts.pox4-pools]
+path = 'contracts/pox4-pools.clar'
 clarity_version = 2
 epoch = 2.5
 
@@ -30,7 +30,7 @@ epoch = 2.5
 ### Tests
 ###
 
-[contracts.pox-pools-1-cycle_flow_test]
-path = 'tests/pox-pools-1-cycle_flow_test.clar'
+[contracts.pox4-pools_flow_test]
+path = 'tests/pox4-pools_flow_test.clar'
 clarity_version = 2
 epoch = 2.5

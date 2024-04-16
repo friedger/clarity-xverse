@@ -71,7 +71,7 @@ plan:
             path: contracts/pox-pool-self-service.clar
             clarity-version: 2
         - emulated-contract-publish:
-            contract-name: pox-pools-1-cycle-v2
+            contract-name: pox4-pools
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: contracts/pox-pools-1-cycle.clar
             clarity-version: 2
@@ -81,8 +81,8 @@ plan:
             path: contracts/testing/helper.clar
             clarity-version: 2
         - emulated-contract-publish:
-            contract-name: pox-pools-1-cycle_flow_test
+            contract-name: pox4-pools_flow_test
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: tests/pox-pools-1-cycle_flow_test.clar
+            path: tests/pox4-pools_flow_test.clar
             clarity-version: 2
       epoch: "2.5"

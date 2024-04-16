@@ -17,7 +17,7 @@ import {
   stackAggregationCommitIndexed,
 } from "./client/pox-4-client.js";
 import {
-  POX_POOLS_1_CYCLE_CONTRACT_NAME,
+  POX4_POOLS,
   StatusResponseOKCV,
   delegateStackStx,
   delegateStx,
@@ -47,7 +47,7 @@ let wallet_2 = accounts.get("wallet_2")!;
 let pool_1 = accounts.get("deployer")!;
 let pool_2 = accounts.get("wallet_8")!;
 
-describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " Status", () => {
+describe(POX4_POOLS + " Status", () => {
   it("Ensure that getStatus returns correct values", () => {
     // info before delegation
     let response = getStatus(pool_1, wallet_1, 1, wallet_1);

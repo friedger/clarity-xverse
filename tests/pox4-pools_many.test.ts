@@ -26,7 +26,7 @@ import {
   stackAggregationIncrease,
 } from "./client/pox-4-client.js";
 import {
-  POX_POOLS_1_CYCLE_CONTRACT_NAME,
+  POX4_POOLS,
   delegateStackStx,
   delegateStx,
   expectOkStatus,
@@ -111,8 +111,8 @@ function delegateAndDelegateStx({ samePoxAddr }: { samePoxAddr: boolean }) {
   expectOkTrue(block, "pox-4", "allow-contract-caller", 2);
   expectOkTrue(block, "pox-4", "allow-contract-caller", 3);
   // verify results for delegate-stx calls
-  expectOkTrue(block, POX_POOLS_1_CYCLE_CONTRACT_NAME, "delegate-stx", 4);
-  expectOkTrue(block, POX_POOLS_1_CYCLE_CONTRACT_NAME, "delegate-stx", 5);
+  expectOkTrue(block, POX4_POOLS, "delegate-stx", 4);
+  expectOkTrue(block, POX4_POOLS, "delegate-stx", 5);
 
   // verify delegate-stack-stx call by pool operator
   expect(block[6].result).toHaveClarityType(ClarityType.ResponseOk);
@@ -132,7 +132,7 @@ function delegateAndDelegateStx({ samePoxAddr }: { samePoxAddr: boolean }) {
   });
 }
 
-describe(POX_POOLS_1_CYCLE_CONTRACT_NAME + " many", () => {
+describe(POX4_POOLS + " many", () => {
   it("Ensure that users can delegate to two different pools using the same pox btc reward address.", () => {
     delegateAndDelegateStx({ samePoxAddr: true });
 

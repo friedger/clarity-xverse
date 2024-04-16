@@ -3,8 +3,8 @@
 (define-public (test-user-can-delegate)
     (begin
         (try! (to-response-uint (contract-call? 'ST000000000000000000002AMW42H.pox-4 allow-contract-caller 
-            .pox-pools-1-cycle-v2 none)))
-        (try! (contract-call? .pox-pools-1-cycle-v2 delegate-stx
+            .pox4-pools none)))
+        (try! (contract-call? .pox4-pools delegate-stx
             u1000000
             'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             none
@@ -16,8 +16,8 @@
 (define-public (test-user-cant-delegate-without-allow)
     (begin 
         (try! (to-response-uint (contract-call? 'ST000000000000000000002AMW42H.pox-4 allow-contract-caller 
-            .pox-pools-1-cycle-v2 none)))
-        (let ((result (contract-call? .pox-pools-1-cycle-v2 delegate-stx
+            .pox4-pools none)))
+        (let ((result (contract-call? .pox4-pools delegate-stx
             u1000000
             'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             none
