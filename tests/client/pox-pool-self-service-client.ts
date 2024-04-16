@@ -51,6 +51,28 @@ export function delegateStackStxMany(stackers: string[], user: string) {
   );
 }
 
+export function maybeStackAggregationCommit(
+  currentCycle: number,
+  signature: string | undefined,
+  signerKey: string,
+  maxAmount: number,
+  authId: number,
+  user: string
+) {
+  return tx.callPublicFn(
+    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
+    "maybe-stack-aggregation-commit",
+    [
+      Cl.uint(currentCycle),
+      signature ? Cl.some(Cl.bufferFromHex(signature)) : Cl.none(),
+      Cl.bufferFromHex(signerKey),
+      Cl.uint(maxAmount),
+      Cl.uint(authId),
+    ],
+    user
+  );
+}
+
 // admin functions
 
 export function setActive(active: boolean, user: string) {

@@ -71,6 +71,11 @@ plan:
             path: contracts/pox-pool-self-service.clar
             clarity-version: 2
         - emulated-contract-publish:
+            contract-name: fp-auto-extend
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/fast-pool/fp-auto-extend.clar
+            clarity-version: 2
+        - emulated-contract-publish:
             contract-name: pox4-pools
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: contracts/pox4-pools.clar
@@ -79,6 +84,11 @@ plan:
             contract-name: helper
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: contracts/testing/helper.clar
+            clarity-version: 2
+        - emulated-contract-publish:
+            contract-name: payout-self-service
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/payout/payout-self-service.clar
             clarity-version: 2
         - emulated-contract-publish:
             contract-name: pox4-pools_flow_test

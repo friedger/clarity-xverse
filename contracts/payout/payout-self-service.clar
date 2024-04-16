@@ -176,7 +176,7 @@
   (let (
       (reward-set-index (unwrap! (contract-call? .pox-pool-self-service-v2 get-pox-addr-index cycle-id) err-not-found)))
     (ok (get total-ustx (unwrap!
-      (contract-call? 'ST000000000000000000002AMW42H.pox-3
+      (contract-call? 'ST000000000000000000002AMW42H.pox-4
         get-reward-set-pox-address
         cycle-id reward-set-index) err-not-found)))))
 

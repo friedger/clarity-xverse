@@ -180,7 +180,6 @@ describe(POX4_POOLS + " Flow", () => {
         "status-list": SomeCV<ListCV<TupleCV<{ "lock-amount": UIntCV }>>>;
       }>
     ).data["status-list"].value;
-    console.log(cvToString(statusListCV));
 
     expect(statusListCV.list[0].data["lock-amount"]).toBeUint(1_000_000);
     expect(statusListCV.list[1].data["lock-amount"]).toBeUint(
