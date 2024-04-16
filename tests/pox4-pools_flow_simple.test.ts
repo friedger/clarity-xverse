@@ -1,5 +1,5 @@
 import { expectOkTrue } from "@stacks/clarunit/src/parser/test-helpers.ts";
-import { Cl, ClarityType, ListCV, ResponseOkCV } from "@stacks/transactions";
+import { ClarityType, ListCV, ResponseOkCV } from "@stacks/transactions";
 import { describe, expect, it } from "vitest";
 import { allowContractCaller } from "./client/pox-4-client.js";
 import {

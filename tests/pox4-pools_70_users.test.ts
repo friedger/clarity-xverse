@@ -13,8 +13,8 @@ import {
   delegateStackStx,
   delegateStx,
   getTotal,
-  poxPools1CycleContract,
-} from "./client/pox-pools-1-cycle-client.ts";
+  pox4PoolsContract,
+} from "./client/pox4-pools-client.js";
 import { btcAddrWallet1 } from "./constants.ts";
 
 function generateWallets(count: number) {
@@ -60,15 +60,15 @@ describe("70 users", () => {
     // allow contract caller
     block = simnet.mineBlock(
       users.map((user) =>
-        allowContractCaller(poxPools1CycleContract, undefined, user.address)
+        allowContractCaller(pox4PoolsContract, undefined, user.address)
       )
     );
     block.map((r: any) => expect(r.result).toBeOk(Cl.bool(true)));
 
     // allow contract caller pool operator and whale
     simnet.mineBlock([
-      allowContractCaller(poxPools1CycleContract, undefined, deployer),
-      allowContractCaller(poxPools1CycleContract, undefined, wallet_1),
+      allowContractCaller(pox4PoolsContract, undefined, deployer),
+      allowContractCaller(pox4PoolsContract, undefined, wallet_1),
     ]);
 
     // delegate all users

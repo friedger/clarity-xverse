@@ -11,7 +11,11 @@ import {
   Cl,
   ListCV,
   ResponseOkCV,
+  SomeCV,
+  TupleCV,
+  UIntCV,
   createStacksPrivateKey,
+  cvToString,
   pubKeyfromPrivKey,
   publicKeyToString,
 } from "@stacks/transactions";
@@ -28,6 +32,7 @@ import {
   delegateStx,
   expectOkStatus,
   getStatus,
+  getStatusList,
   getTotal,
   pox4PoolsContract,
 } from "./client/pox4-pools-client.ts";
@@ -125,7 +130,7 @@ describe(POX4_POOLS + " Flow", () => {
 
     lockingInfoList = (block[6].result as ResponseOkCV<ListCV>).value.list;
     expectOkLockingResult(lockingInfoList[0], {
-      lockAmount: 2_000_000,
+      lockAmount: 1_000_000,
       stacker: wallet_1,
       unlockBurnHeight: 2 * CYCLE,
     });
@@ -168,8 +173,21 @@ describe(POX4_POOLS + " Flow", () => {
     // verify that pox-addr-index = 0
     expect(block[0].result).toBeOk(Cl.uint(0));
     const total = getTotal(deployer, 1, deployer);
-    // FIXME: Only 10_000_002 STX were locked
-    expect(total.result).toBeUint(10_000_003_000_000);
+    expect(total.result).toBeUint(10_000_002_000_000);
+    const statusList = getStatusList(deployer, 1, 0, deployer);
+    const statusListCV = (
+      statusList.result as TupleCV<{
+        "status-list": SomeCV<ListCV<TupleCV<{ "lock-amount": UIntCV }>>>;
+      }>
+    ).data["status-list"].value;
+    console.log(cvToString(statusListCV));
+
+    expect(statusListCV.list[0].data["lock-amount"]).toBeUint(1_000_000);
+    expect(statusListCV.list[1].data["lock-amount"]).toBeUint(
+      10_000_000_000_000
+    );
+    // increase by 1 STX
+    expect(statusListCV.list[2].data["lock-amount"]).toBeUint(1_000_000);
   });
 
   it("Ensure that pool operator can't stack more than user balance", () => {
@@ -420,7 +438,7 @@ describe(POX4_POOLS + " Flow", () => {
     ]);
     lockingInfoList = (block[0].result as ResponseOkCV<ListCV>).value.list;
     expectOkLockingResult(lockingInfoList[0], {
-      lockAmount: 10_000_000,
+      lockAmount: 9_000_000, // increased by 9 STX
       stacker: wallet_1,
       unlockBurnHeight: 2 * CYCLE,
     });
@@ -464,7 +482,7 @@ describe(POX4_POOLS + " Flow", () => {
         hashbytes: btcAddrWallet1.hashbytes,
         version: btcAddrWallet1.version,
         cycle: 0,
-        total: 11_000_000, // FIXME: should be 10 STX total
+        total: 10_000_000,
       },
     });
 

@@ -1,11 +1,4 @@
-import {
-  Cl,
-  ClarityType,
-  ListCV,
-  ResponseCV,
-  ResponseOkCV,
-  cvToString,
-} from "@stacks/transactions";
+import { Cl } from "@stacks/transactions";
 import { describe, expect, it } from "vitest";
 import { allowContractCaller } from "./client/pox-4-client.js";
 import {

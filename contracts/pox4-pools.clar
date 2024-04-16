@@ -113,7 +113,7 @@
                 (let ((increase-by (- amount-ustx locked-amount)))
                   (match (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stack-increase
                           user pox-address increase-by)
-                    success-increase (ok {lock-amount: (get total-locked success-increase),
+                    success-increase (ok {lock-amount: increase-by,
                                           stacker: user,
                                           unlock-burn-height: unlock-burn-height})
                     error-increase (err (* u1000000000 (to-uint error-increase)))))))
@@ -174,21 +174,21 @@
               user-details
                 ;; Call delegate-stack-stx
                 ;; On failure, call delegate-stack-extend and increase
-              (match (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stack-stx
-                       user amount-ustx
-                       pox-address start-burn-ht u1)
-                stacker-details  (begin
-                                  ;; Store result on success
-                                   (map-set-details tx-sender (merge-details stacker-details user-details))
-                                   (ok stacker-details))
-                error (if (is-eq error 3) ;; Check whether user is already stacked
-                        (match (delegate-stack-extend-increase user amount-ustx pox-address)
-                          stacker-details-2 (begin
-                                  ;; Store result on success
-                                   (map-set-details tx-sender (merge-details stacker-details-2 user-details))
-                                   (ok stacker-details-2))
-                          error-extend-increase (err error-extend-increase))
-                        (err (* u1000 (to-uint error)))))
+                (match (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stack-stx
+                        user amount-ustx
+                        pox-address start-burn-ht u1)
+                  stacker-details  (begin
+                                    ;; Store result on success
+                                    (map-set-details tx-sender (merge-details stacker-details user-details))
+                                    (ok stacker-details))
+                  error (if (is-eq error 3) ;; Check whether user is already stacked
+                          (match (delegate-stack-extend-increase user amount-ustx pox-address)
+                            stacker-details-2 (begin
+                                    ;; Store result on success
+                                    (map-set-details tx-sender (merge-details stacker-details-2 user-details))
+                                    (ok stacker-details-2))
+                            error-extend-increase (err error-extend-increase))
+                          (err (* u1000 (to-uint error)))))
               err-not-found)
             err-non-positive-amount)))
         ;; Return a tuple even if delegate-stack-stx call failed

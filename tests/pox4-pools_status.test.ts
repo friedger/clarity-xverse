@@ -1,12 +1,16 @@
 import { hexToBytes } from "@stacks/common";
+import { StacksTestnet } from "@stacks/network";
+import {
+  Pox4SignatureTopic,
+  poxAddressToBtcAddress,
+  signPox4SignatureHash,
+} from "@stacks/stacking";
 import {
   BufferCV,
   Cl,
-  ClarityType,
   SomeCV,
   TupleCV,
   createStacksPrivateKey,
-  createStacksPublicKey,
   pubKeyfromPrivKey,
   publicKeyToString,
 } from "@stacks/transactions";
@@ -18,7 +22,6 @@ import {
 } from "./client/pox-4-client.js";
 import {
   POX4_POOLS,
-  StatusResponseOKCV,
   delegateStackStx,
   delegateStx,
   expectOkStatus,
@@ -34,12 +37,6 @@ import {
   btcAddrWallet2,
   poxAddrPool1,
 } from "./constants.ts";
-import {
-  Pox4SignatureTopic,
-  poxAddressToBtcAddress,
-  signPox4SignatureHash,
-} from "@stacks/stacking";
-import { StacksTestnet } from "@stacks/network";
 
 const accounts = simnet.getAccounts();
 let wallet_1 = accounts.get("wallet_1")!;
