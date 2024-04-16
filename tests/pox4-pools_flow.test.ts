@@ -168,8 +168,8 @@ describe(POX4_POOLS + " Flow", () => {
     // verify that pox-addr-index = 0
     expect(block[0].result).toBeOk(Cl.uint(0));
     const total = getTotal(deployer, 1, deployer);
-    // FIXME: Only 100_002 STX were locked
-    expect(total.result).toBeUint(100_003_000_000);
+    // FIXME: Only 10_000_002 STX were locked
+    expect(total.result).toBeUint(10_000_003_000_000);
   });
 
   it("Ensure that pool operator can't stack more than user balance", () => {
