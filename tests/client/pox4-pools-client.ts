@@ -13,7 +13,7 @@ import { poxAddrCV } from "./pox-4-client";
 import { expect } from "vitest";
 
 export const POX4_POOLS = "pox4-pools";
-export const poxPools1CycleContract =
+export const pox4PoolsContract =
   simnet.getAccounts().get("deployer")!! + "." + POX4_POOLS;
 
 export function poxDelegationAllowContractCaller(

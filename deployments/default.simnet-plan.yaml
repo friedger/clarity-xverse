@@ -73,7 +73,7 @@ plan:
         - emulated-contract-publish:
             contract-name: pox4-pools
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: contracts/pox-pools-1-cycle.clar
+            path: contracts/pox4-pools.clar
             clarity-version: 2
         - emulated-contract-publish:
             contract-name: helper

@@ -28,8 +28,9 @@ import {
   delegateStx,
   expectOkStatus,
   getStatus,
-  poxPools1CycleContract,
-} from "./client/pox-pools-1-cycle-client.ts";
+  getTotal,
+  pox4PoolsContract,
+} from "./client/pox4-pools-client.ts";
 import {
   Errors,
   PoxErrors,
@@ -50,12 +51,12 @@ describe(POX4_POOLS + " Flow", () => {
     const { CYCLE } = getCycleLength();
 
     let block = simnet.mineBlock([
-      allowContractCaller(poxPools1CycleContract, undefined, deployer),
-      allowContractCaller(poxPools1CycleContract, undefined, wallet_1),
-      allowContractCaller(poxPools1CycleContract, undefined, wallet_2),
+      allowContractCaller(pox4PoolsContract, undefined, deployer),
+      allowContractCaller(pox4PoolsContract, undefined, wallet_1),
+      allowContractCaller(pox4PoolsContract, undefined, wallet_2),
 
       delegateStx(
-        1_000_000,
+        2_000_000,
         deployer,
         6300,
         undefined,
@@ -87,6 +88,18 @@ describe(POX4_POOLS + " Flow", () => {
         40,
         deployer
       ),
+      // increase amount for wallet_1
+      delegateStackStx(
+        [
+          {
+            user: wallet_1,
+            amountUstx: 2_000_000,
+          },
+        ],
+        poxAddrPool1,
+        40,
+        deployer
+      ),
     ]);
 
     // verify results for allow contract caller
@@ -97,7 +110,7 @@ describe(POX4_POOLS + " Flow", () => {
     expectOkTrue(block, POX4_POOLS, "delegate-stx", 3);
     expectOkTrue(block, POX4_POOLS, "delegate-stx", 4);
 
-    // verify delegate-stack-stx call by pool operator
+    // verify delegate-stack-stx calls by pool operator
     let lockingInfoList = (block[5].result as ResponseOkCV<ListCV>).value.list;
     expectOkLockingResult(lockingInfoList[0], {
       lockAmount: 1_000_000,
@@ -107,6 +120,13 @@ describe(POX4_POOLS + " Flow", () => {
     expectOkLockingResult(lockingInfoList[1], {
       lockAmount: 10_000_000_000_000,
       stacker: wallet_2,
+      unlockBurnHeight: 2 * CYCLE,
+    });
+
+    lockingInfoList = (block[6].result as ResponseOkCV<ListCV>).value.list;
+    expectOkLockingResult(lockingInfoList[0], {
+      lockAmount: 2_000_000,
+      stacker: wallet_1,
       unlockBurnHeight: 2 * CYCLE,
     });
 
@@ -147,15 +167,18 @@ describe(POX4_POOLS + " Flow", () => {
     ]);
     // verify that pox-addr-index = 0
     expect(block[0].result).toBeOk(Cl.uint(0));
+    const total = getTotal(deployer, 1, deployer);
+    // FIXME: Only 100_002 STX were locked
+    expect(total.result).toBeUint(100_003_000_000);
   });
 
   it("Ensure that pool operator can't stack more than user balance", () => {
     const { CYCLE } = getCycleLength();
 
     let block = simnet.mineBlock([
-      allowContractCaller(poxPools1CycleContract, undefined, deployer),
-      allowContractCaller(poxPools1CycleContract, undefined, wallet_1),
-      allowContractCaller(poxPools1CycleContract, undefined, wallet_2),
+      allowContractCaller(pox4PoolsContract, undefined, deployer),
+      allowContractCaller(pox4PoolsContract, undefined, wallet_1),
+      allowContractCaller(pox4PoolsContract, undefined, wallet_2),
 
       delegateStx(
         1_000_000,
@@ -249,9 +272,9 @@ describe(POX4_POOLS + " Flow", () => {
     const { CYCLE } = getCycleLength();
 
     let block = simnet.mineBlock([
-      allowContractCaller(poxPools1CycleContract, undefined, deployer),
-      allowContractCaller(poxPools1CycleContract, undefined, wallet_1),
-      allowContractCaller(poxPools1CycleContract, undefined, wallet_2),
+      allowContractCaller(pox4PoolsContract, undefined, deployer),
+      allowContractCaller(pox4PoolsContract, undefined, wallet_1),
+      allowContractCaller(pox4PoolsContract, undefined, wallet_2),
 
       delegateStx(
         1_000_000,
@@ -329,8 +352,8 @@ describe(POX4_POOLS + " Flow", () => {
     const { CYCLE } = getCycleLength();
 
     let block = simnet.mineBlock([
-      allowContractCaller(poxPools1CycleContract, undefined, deployer),
-      allowContractCaller(poxPools1CycleContract, undefined, wallet_1),
+      allowContractCaller(pox4PoolsContract, undefined, deployer),
+      allowContractCaller(pox4PoolsContract, undefined, wallet_1),
 
       delegateStx(
         1_000_000,

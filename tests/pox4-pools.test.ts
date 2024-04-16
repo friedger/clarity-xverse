@@ -12,8 +12,8 @@ import {
   POX4_POOLS,
   delegateStackStx,
   delegateStx,
-  poxPools1CycleContract,
-} from "./client/pox-pools-1-cycle-client.ts";
+  pox4PoolsContract,
+} from "./client/pox4-pools-client.ts";
 import { Errors, PoxErrors, poxAddrPool1 } from "./constants.ts";
 
 const accounts = simnet.getAccounts();
@@ -24,7 +24,7 @@ const wallet_2 = accounts.get("wallet_2")!;
 describe(POX4_POOLS, () => {
   it("Ensure that user can't lock stx", () => {
     let block = simnet.mineBlock([
-      allowContractCaller(poxPools1CycleContract, undefined, wallet_1),
+      allowContractCaller(pox4PoolsContract, undefined, wallet_1),
 
       delegateStx(
         1_000_000_000,
@@ -64,7 +64,7 @@ describe(POX4_POOLS, () => {
 
   it("Ensure that pool operator can't lock for non-member", () => {
     let block = simnet.mineBlock([
-      allowContractCaller(poxPools1CycleContract, undefined, deployer),
+      allowContractCaller(pox4PoolsContract, undefined, deployer),
 
       delegateStackStx(
         [
@@ -84,30 +84,5 @@ describe(POX4_POOLS, () => {
     expect(block[1].result).toBeOk(
       Cl.list([Cl.error(Cl.uint(Errors.NotFound))])
     );
-  });
-
-  it("Ensure that pool operator can't lock for non-member", () => {
-    let block = simnet.mineBlock([
-      allowContractCaller(poxPools1CycleContract, undefined, deployer),
-
-      delegateStackStx(
-        [
-          {
-            user: wallet_1,
-            amountUstx: 1000000,
-          },
-        ],
-        poxAddrPool1,
-        40,
-        deployer
-      ),
-    ]);
-
-    expect(block[0].result).toBeOk(Cl.bool(true));
-    // verify delegate-stack-stx by wallet 2
-    expect(block[1].result).toHaveClarityType(ClarityType.ResponseOk);
-    let lockingInfoList = (block[1].result as ResponseOkCV<ListCV<ResponseCV>>)
-      .value.list;
-    expect(lockingInfoList[0]).toBeErr(Cl.uint(Errors.NotFound));
   });
 });

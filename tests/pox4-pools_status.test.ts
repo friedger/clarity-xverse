@@ -25,8 +25,8 @@ import {
   getNotLockedForCycle,
   getStatus,
   getUserData,
-  poxPools1CycleContract,
-} from "./client/pox-pools-1-cycle-client.ts";
+  pox4PoolsContract,
+} from "./client/pox4-pools-client.ts";
 import {
   Errors,
   PoxErrors,
@@ -57,9 +57,9 @@ describe(POX4_POOLS + " Status", () => {
     expect(response.result).toBeNone();
 
     let block = simnet.mineBlock([
-      allowContractCaller(poxPools1CycleContract, undefined, wallet_1),
-      allowContractCaller(poxPools1CycleContract, undefined, wallet_2),
-      allowContractCaller(poxPools1CycleContract, undefined, pool_1),
+      allowContractCaller(pox4PoolsContract, undefined, wallet_1),
+      allowContractCaller(pox4PoolsContract, undefined, wallet_2),
+      allowContractCaller(pox4PoolsContract, undefined, pool_1),
 
       delegateStx(
         100_000_000,

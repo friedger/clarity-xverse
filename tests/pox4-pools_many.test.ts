@@ -34,8 +34,8 @@ import {
   getStatus,
   getStatusList,
   getStatusListsLastIndex,
-  poxPools1CycleContract,
-} from "./client/pox-pools-1-cycle-client.ts";
+  pox4PoolsContract,
+} from "./client/pox4-pools-client.ts";
 import {
   btcAddrWallet1,
   btcAddrWallet2,
@@ -55,10 +55,10 @@ function delegateAndDelegateStx({ samePoxAddr }: { samePoxAddr: boolean }) {
   const { CYCLE } = getCycleLength();
 
   let block = simnet.mineBlock([
-    allowContractCaller(poxPools1CycleContract, undefined, wallet_1),
-    allowContractCaller(poxPools1CycleContract, undefined, wallet_2),
-    allowContractCaller(poxPools1CycleContract, undefined, pool_1),
-    allowContractCaller(poxPools1CycleContract, undefined, pool_2),
+    allowContractCaller(pox4PoolsContract, undefined, wallet_1),
+    allowContractCaller(pox4PoolsContract, undefined, wallet_2),
+    allowContractCaller(pox4PoolsContract, undefined, pool_1),
+    allowContractCaller(pox4PoolsContract, undefined, pool_2),
 
     delegateStx(
       10_000_000_000_000,

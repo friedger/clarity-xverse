@@ -6,8 +6,8 @@ import {
   POX4_POOLS,
   delegateStackStxSimple,
   delegateStx,
-  poxPools1CycleContract,
-} from "./client/pox-pools-1-cycle-client.ts";
+  pox4PoolsContract,
+} from "./client/pox4-pools-client.ts";
 import { btcAddrWallet1, btcAddrWallet2, poxAddrPool1 } from "./constants.ts";
 import { expectOkLockingResult } from "./utils.ts";
 
@@ -19,9 +19,9 @@ let wallet_2 = accounts.get("wallet_2")!;
 describe(POX4_POOLS + " Simple flow", () => {
   it("Ensure that user can delegate and pool operator can lock stx without detailed amount", () => {
     let block = simnet.mineBlock([
-      allowContractCaller(poxPools1CycleContract, undefined, deployer),
-      allowContractCaller(poxPools1CycleContract, undefined, wallet_1),
-      allowContractCaller(poxPools1CycleContract, undefined, wallet_2),
+      allowContractCaller(pox4PoolsContract, undefined, deployer),
+      allowContractCaller(pox4PoolsContract, undefined, wallet_1),
+      allowContractCaller(pox4PoolsContract, undefined, wallet_2),
 
       delegateStx(
         1_000_000,
