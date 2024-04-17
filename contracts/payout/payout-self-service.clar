@@ -5,7 +5,7 @@
 (define-constant err-insufficient-rewards (err u502))
 (define-constant err-unexpected (err u999))
 
-(define-constant pox-info (unwrap-panic (contract-call? 'ST000000000000000000002AMW42H.pox-3 get-pox-info)))
+(define-constant pox-info (unwrap-panic (contract-call? 'ST000000000000000000002AMW42H.pox-4 get-pox-info)))
 (define-data-var rewards-admin principal tx-sender)
 (define-data-var reward-balance uint u0)
 (define-data-var last-reward-id uint u0)

@@ -54,7 +54,7 @@ plan:
             emulated-sender: SP3C0TCQS0C0YY8E0V3EJ7V4X9571885D44M8EFWF
             path: "./.cache/requirements/SP3C0TCQS0C0YY8E0V3EJ7V4X9571885D44M8EFWF.arkadiko-automation-trait-v1.clar"
             clarity-version: 1
-      epoch: "2.1"
+      epoch: "2.05"
     - id: 1
       transactions:
         - emulated-contract-publish:

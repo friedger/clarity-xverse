@@ -5,7 +5,7 @@
 (define-data-var users (list 30 principal) (list))
 
 (define-constant deployer tx-sender)
-(define-constant pox-info (unwrap-panic (contract-call? 'ST000000000000000000002AMW42H.pox-3 get-pox-info)))
+(define-constant pox-info (unwrap-panic (contract-call? 'ST000000000000000000002AMW42H.pox-4 get-pox-info)))
 (define-constant cycle-length (get reward-cycle-length pox-info))
 (define-constant half-cycle-length (/ (get reward-cycle-length pox-info) u2))
 (define-constant first-burnchain-block-height (get first-burnchain-block-height pox-info))

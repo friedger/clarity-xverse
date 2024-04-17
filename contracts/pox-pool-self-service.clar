@@ -274,9 +274,13 @@
 
 (define-read-only (get-reward-set-at-block (reward-cycle uint) (stacks-height uint))
   (at-block (unwrap! (get-block-info? id-header-hash stacks-height) none)
-    (match (print (map-get? pox-addr-indices reward-cycle))
+    (get-reward-set-from-pox reward-cycle)))
+
+(define-read-only (get-reward-set-from-pox (reward-cycle uint))
+  (match (map-get? pox-addr-indices reward-cycle)
       index (contract-call? 'ST000000000000000000002AMW42H.pox-4 get-reward-set-pox-address reward-cycle index)
-      none)))
+      none))
+
 
 ;; Returns currently delegated amount for a given user
 (define-read-only (get-delegated-amount (user principal))
