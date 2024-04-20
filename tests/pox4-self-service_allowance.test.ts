@@ -1,22 +1,37 @@
 import { tx } from "@hirosystems/clarinet-sdk";
 import { Cl } from "@stacks/transactions";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { allowContractCaller, getCycleLength } from "./client/pox-4-client.js";
 import {
-  POX_POOL_SELF_SERVICE_CONTRACT_NAME,
+  POX4_SELF_SERVICE_CONTRACT_NAME,
   delegateStx,
   fpDelegationAllowContractCaller,
   poxPoolSelfServiceContract,
-} from "./client/pox-pool-self-service-client.ts";
+  setPoxAddressActive,
+} from "./client/pox4-self-service-client.ts";
 import { PoxErrors, poxAddrFP } from "./constants.ts";
 import { expectOkLockingResult, expectPartialStackedByCycle } from "./utils.ts";
+import { expectOkTrue } from "@stacks/clarunit/src/parser/test-helpers.ts";
 const accounts = simnet.getAccounts();
 const deployer = accounts.get("deployer")!;
 const wallet_1 = accounts.get("wallet_1")!;
 
 const { CYCLE } = getCycleLength();
 
-describe(POX_POOL_SELF_SERVICE_CONTRACT_NAME + " allowance", () => {
+describe(POX4_SELF_SERVICE_CONTRACT_NAME + " allowance", () => {
+  beforeEach(() => {
+    let block = simnet.mineBlock([
+      setPoxAddressActive(
+        "bc1qs0kkdpsrzh3ngqgth7mkavlwlzr7lms2zv3wxe",
+        deployer
+      ),
+    ]);
+    expectOkTrue(
+      block,
+      POX4_SELF_SERVICE_CONTRACT_NAME,
+      "set-pox-address-active"
+    );
+  });
   it("Ensure that user can't delegate without allowance", () => {
     // try without any allowance
     let block = simnet.mineBlock([delegateStx(20_000_000_000_000, wallet_1)]);

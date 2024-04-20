@@ -1,17 +1,18 @@
 import { expectOkTrue } from "@stacks/clarunit/src/parser/test-helpers.ts";
 import { Cl, ClarityType, ListCV, ResponseOkCV } from "@stacks/transactions";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { allowContractCaller, getCycleLength } from "./client/pox-4-client.js";
 import {
-  POX_POOL_SELF_SERVICE_CONTRACT_NAME,
+  POX4_SELF_SERVICE_CONTRACT_NAME,
   delegateStackStxMany,
   delegateStx,
   poxPoolSelfServiceContract,
   setActive,
   setPoolPoxAddress,
+  setPoxAddressActive,
   setRewardAdmin,
   setStxBuffer,
-} from "./client/pox-pool-self-service-client.ts";
+} from "./client/pox4-self-service-client.ts";
 import { FpErrors, btcAddrWallet1, poxAddrFP } from "./constants.ts";
 import { expectOkLockingResult, expectPartialStackedByCycle } from "./utils.ts";
 
@@ -20,7 +21,21 @@ const deployer = accounts.get("deployer")!;
 const wallet_1 = accounts.get("wallet_1")!;
 const { CYCLE } = getCycleLength();
 
-describe(POX_POOL_SELF_SERVICE_CONTRACT_NAME + " admin", () => {
+describe(POX4_SELF_SERVICE_CONTRACT_NAME + " admin", () => {
+  beforeEach(() => {
+    let block = simnet.mineBlock([
+      setPoxAddressActive(
+        "bc1qs0kkdpsrzh3ngqgth7mkavlwlzr7lms2zv3wxe",
+        deployer
+      ),
+    ]);
+    expectOkTrue(
+      block,
+      POX4_SELF_SERVICE_CONTRACT_NAME,
+      "set-pox-address-active"
+    );
+  });
+
   it("Ensure that admin can deactivate contract", () => {
     const { HALF_CYCLE, CYCLE } = getCycleLength();
 

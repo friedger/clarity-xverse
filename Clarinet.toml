@@ -11,8 +11,8 @@ contract_id = 'SP3C0TCQS0C0YY8E0V3EJ7V4X9571885D44M8EFWF.arkadiko-automation-tra
 [[project.requirements]]
 contract_id = 'SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.pox-fast-pool-v2'
 
-[contracts.pox-pool-self-service-v2]
-path = 'contracts/pox-pool-self-service.clar'
+[contracts.pox4-self-service-v3]
+path = 'contracts/pox4-self-service.clar'
 clarity_version = 2
 epoch = 2.5
 

@@ -1,6 +1,6 @@
 import { expectOkTrue } from "@stacks/clarunit/src/parser/test-helpers.ts";
 import { Cl, ListCV, ResponseOkCV } from "@stacks/transactions";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import {
   allowContractCaller,
   asyncExpectCurrentCycle,
@@ -8,12 +8,13 @@ import {
   delegateStx as poxDelegateStx,
 } from "./client/pox-4-client.js";
 import {
-  POX_POOL_SELF_SERVICE_CONTRACT_NAME,
+  POX4_SELF_SERVICE_CONTRACT_NAME,
   delegateStackStx,
   delegateStackStxMany,
   delegateStx,
   poxPoolSelfServiceContract,
-} from "./client/pox-pool-self-service-client.ts";
+  setPoxAddressActive,
+} from "./client/pox4-self-service-client.ts";
 import { FpErrors, poxAddrFP } from "./constants.ts";
 import {
   expectOkLockingResult,
@@ -26,7 +27,21 @@ const wallet_1 = accounts.get("wallet_1")!;
 const wallet_2 = accounts.get("wallet_2")!;
 const { CYCLE, HALF_CYCLE } = getCycleLength();
 
-describe(POX_POOL_SELF_SERVICE_CONTRACT_NAME + " pool operator many", () => {
+describe(POX4_SELF_SERVICE_CONTRACT_NAME + " pool operator many", () => {
+  beforeEach(() => {
+    let block = simnet.mineBlock([
+      setPoxAddressActive(
+        "bc1qs0kkdpsrzh3ngqgth7mkavlwlzr7lms2zv3wxe",
+        deployer
+      ),
+    ]);
+    expectOkTrue(
+      block,
+      POX4_SELF_SERVICE_CONTRACT_NAME,
+      "set-pox-address-active"
+    );
+  });
+
   it("Ensure users can't lock when already stacking", () => {
     simnet.mineEmptyBlocks(2 * CYCLE);
 
@@ -167,7 +182,7 @@ describe(POX_POOL_SELF_SERVICE_CONTRACT_NAME + " pool operator many", () => {
     expectPartialStackedByCycle(poxAddrFP, 2, undefined, deployer);
 
     // advance to middle of next cycle
-    simnet.mineEmptyBlocks(CYCLE + HALF_CYCLE - 3);
+    simnet.mineEmptyBlocks(CYCLE + HALF_CYCLE - 4);
     // try to extend to cycle 3 early
     block = simnet.mineBlock([delegateStackStx(wallet_1, wallet_2)]);
     expect(simnet.blockHeight).toBe(CYCLE + HALF_CYCLE + 2);

@@ -13,18 +13,21 @@ import {
   pubKeyfromPrivKey,
   publicKeyToString,
 } from "@stacks/transactions";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import {
   allowContractCaller,
   getCycleLength,
   stackAggregationCommitIndexed,
 } from "./client/pox-4-client.js";
 import {
+  POX4_SELF_SERVICE_CONTRACT_NAME,
   delegateStx,
   maybeStackAggregationCommit,
   poxPoolSelfServiceContract,
-} from "./client/pox-pool-self-service-client.ts";
+  setPoxAddressActive,
+} from "./client/pox4-self-service-client.ts";
 import { poxAddrFP, poxAddrPool1 } from "./constants.ts";
+import { expectOkTrue } from "@stacks/clarunit/src/parser/test-helpers.ts";
 
 const accounts = simnet.getAccounts();
 const deployer = accounts.get("deployer")!;
@@ -32,6 +35,19 @@ const wallet_1 = accounts.get("wallet_1")!;
 const wallet_2 = accounts.get("wallet_2")!;
 
 describe("payout-self-service", () => {
+  beforeEach(() => {
+    let block = simnet.mineBlock([
+      setPoxAddressActive(
+        "bc1qs0kkdpsrzh3ngqgth7mkavlwlzr7lms2zv3wxe",
+        deployer
+      ),
+    ]);
+    expectOkTrue(
+      block,
+      POX4_SELF_SERVICE_CONTRACT_NAME,
+      "set-pox-address-active"
+    );
+  });
   it("Ensure that only reward admin can deposit rewards", () => {
     const { CYCLE } = getCycleLength();
 

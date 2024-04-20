@@ -2,31 +2,31 @@
 id: 0
 name: Testnet deployment
 network: testnet
-stacks-node: "https://api24.testnet.dev.hiro.so"
+stacks-node: "https://api.testnet.hiro.so"
 bitcoin-node: "http://blockstack:blockstacksystem@bitcoind.testnet.stacks.co:18332"
 plan:
   batches:
-    - id: 0
+    - id: 1
       transactions:
         - contract-publish:
-            contract-name: pox-pool-self-service
-            expected-sender: ST2PABAF9FTAJYNFZH93XENAJ8FVY99RRM4DF2YCW
-            cost: 172840
+            contract-name: pox-pool-self-service-v3
+            expected-sender: ST3FFRX7C911PZP5RHE148YDVDD9JWVS6FZRA60VS
+            cost: 12547840
             path: contracts/pox-pool-self-service.clar
             anchor-block-only: true
             clarity-version: 2
         - contract-publish:
-            contract-name: pox-pools-1-cycle
-            expected-sender: ST2PABAF9FTAJYNFZH93XENAJ8FVY99RRM4DF2YCW
-            cost: 180330
-            path: contracts/pox-pools-1-cycle.clar
+            contract-name: pox4-pools
+            expected-sender: ST3FFRX7C911PZP5RHE148YDVDD9JWVS6FZRA60VS
+            cost: 12556226
+            path: contracts/pox4-pools.clar
             anchor-block-only: true
             clarity-version: 2
         - contract-publish:
             contract-name: helper
-            expected-sender: ST2PABAF9FTAJYNFZH93XENAJ8FVY99RRM4DF2YCW
-            cost: 7630
+            expected-sender: ST3FFRX7C911PZP5RHE148YDVDD9JWVS6FZRA60VS
+            cost: 12486846
             path: contracts/testing/helper.clar
             anchor-block-only: true
             clarity-version: 2
-      epoch: "2.4"
+      epoch: "2.5"

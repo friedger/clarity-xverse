@@ -39,7 +39,7 @@
   (let ((next-cycle (+ u1 (current-pox-reward-cycle))))
     (asserts! (unwrap-panic (check-job)) (ok false))
     (map-insert commits next-cycle block-height)
-    (try! (contract-call? .pox-pool-self-service-v2 delegate-stack-stx-many (var-get users)))
+    (try! (contract-call? .pox4-self-service-v3 delegate-stack-stx-many (var-get users)))
     (ok true)))
 
 (define-read-only (get-commit (reward-cycle uint))

@@ -54,7 +54,7 @@ plan:
             emulated-sender: SP3C0TCQS0C0YY8E0V3EJ7V4X9571885D44M8EFWF
             path: "./.cache/requirements/SP3C0TCQS0C0YY8E0V3EJ7V4X9571885D44M8EFWF.arkadiko-automation-trait-v1.clar"
             clarity-version: 1
-      epoch: "2.05"
+      epoch: "2.1"
     - id: 1
       transactions:
         - emulated-contract-publish:
@@ -66,9 +66,9 @@ plan:
     - id: 2
       transactions:
         - emulated-contract-publish:
-            contract-name: pox-pool-self-service-v2
+            contract-name: pox4-self-service-v3
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: contracts/pox-pool-self-service.clar
+            path: contracts/pox4-self-service.clar
             clarity-version: 2
         - emulated-contract-publish:
             contract-name: fp-auto-extend

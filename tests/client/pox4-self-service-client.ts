@@ -1,12 +1,13 @@
 import { tx } from "@hirosystems/clarinet-sdk";
 import { Cl } from "@stacks/transactions";
 import { poxAddrCV } from "./pox-4-client";
+import { poxAddressToTuple } from "@stacks/stacking";
 
-export const POX_POOL_SELF_SERVICE_CONTRACT_NAME = "pox-pool-self-service-v2";
+export const POX4_SELF_SERVICE_CONTRACT_NAME = "pox4-self-service-v3";
 export const poxPoolSelfServiceContract =
   simnet.getAccounts().get("deployer")!! +
   "." +
-  POX_POOL_SELF_SERVICE_CONTRACT_NAME;
+  POX4_SELF_SERVICE_CONTRACT_NAME;
 
 export function fpDelegationAllowContractCaller(
   contractCaller: string,
@@ -14,7 +15,7 @@ export function fpDelegationAllowContractCaller(
   user: string
 ) {
   return tx.callPublicFn(
-    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
+    POX4_SELF_SERVICE_CONTRACT_NAME,
     "allow-contract-caller",
     [
       Cl.principal(contractCaller),
@@ -26,16 +27,25 @@ export function fpDelegationAllowContractCaller(
 
 export function delegateStx(amount: number, user: string) {
   return tx.callPublicFn(
-    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
+    POX4_SELF_SERVICE_CONTRACT_NAME,
     "delegate-stx",
     [Cl.uint(amount)],
     user
   );
 }
 
+export function setPoxAddressActive(poxAddress: string, user: string) {
+  return tx.callPublicFn(
+    POX4_SELF_SERVICE_CONTRACT_NAME,
+    "set-pool-pox-address-active",
+    [poxAddressToTuple(poxAddress)],
+    user
+  );
+}
+
 export function delegateStackStx(stacker: string, user: string) {
   return tx.callPublicFn(
-    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
+    POX4_SELF_SERVICE_CONTRACT_NAME,
     "delegate-stack-stx",
     [Cl.principal(stacker)],
     user
@@ -44,7 +54,7 @@ export function delegateStackStx(stacker: string, user: string) {
 
 export function delegateStackStxMany(stackers: string[], user: string) {
   return tx.callPublicFn(
-    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
+    POX4_SELF_SERVICE_CONTRACT_NAME,
     "delegate-stack-stx-many",
     [Cl.list(stackers.map((s) => Cl.principal(s)))],
     user
@@ -60,7 +70,7 @@ export function maybeStackAggregationCommit(
   user: string
 ) {
   return tx.callPublicFn(
-    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
+    POX4_SELF_SERVICE_CONTRACT_NAME,
     "maybe-stack-aggregation-commit",
     [
       Cl.uint(currentCycle),
@@ -77,7 +87,7 @@ export function maybeStackAggregationCommit(
 
 export function setActive(active: boolean, user: string) {
   return tx.callPublicFn(
-    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
+    POX4_SELF_SERVICE_CONTRACT_NAME,
     "set-active",
     [Cl.bool(active)],
     user
@@ -86,7 +96,7 @@ export function setActive(active: boolean, user: string) {
 
 export function setStxBuffer(amount: number, user: string) {
   return tx.callPublicFn(
-    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
+    POX4_SELF_SERVICE_CONTRACT_NAME,
     "set-stx-buffer",
     [Cl.uint(amount)],
     user
@@ -98,7 +108,7 @@ export function setPoolPoxAddress(
   user: string
 ) {
   return tx.callPublicFn(
-    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
+    POX4_SELF_SERVICE_CONTRACT_NAME,
     "set-pool-pox-address",
     [poxAddrCV(poxAddress)],
     user
@@ -111,7 +121,7 @@ export function setRewardAdmin(
   user: string
 ) {
   return tx.callPublicFn(
-    POX_POOL_SELF_SERVICE_CONTRACT_NAME,
+    POX4_SELF_SERVICE_CONTRACT_NAME,
     "set-reward-admin",
     [Cl.principal(newAdmin), Cl.bool(enable)],
     user
