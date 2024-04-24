@@ -9,9 +9,17 @@ plan:
     - id: 0
       transactions:
         - contract-publish:
-            contract-name: pox-pools-1-cycle-v2
-            expected-sender: SP001SFSMC2ZY76PD4M68P3WGX154XCH7NE3TYMX
-            cost: 300000
-            path: contracts/pox-pools-1-cycle.clar
+            contract-name: pox4-fast-pool-v3
+            expected-sender: SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP
+            cost: 1881779
+            path: contracts/pox4-self-service.clar
             anchor-block-only: true
             clarity-version: 2
+        - contract-publish:
+            contract-name: pox4-pools
+            expected-sender: SP001SFSMC2ZY76PD4M68P3WGX154XCH7NE3TYMX
+            cost: 1902814
+            path: contracts/pox4-pools.clar
+            anchor-block-only: true
+            clarity-version: 2
+      epoch: "2.5"

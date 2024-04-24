@@ -6,27 +6,43 @@ stacks-node: "https://api.testnet.hiro.so"
 bitcoin-node: "http://blockstack:blockstacksystem@bitcoind.testnet.stacks.co:18332"
 plan:
   batches:
-    - id: 1
+    - id: 0
       transactions:
         - contract-publish:
-            contract-name: pox-pool-self-service-v3
+            contract-name: pox4-self-service-v3
             expected-sender: ST3FFRX7C911PZP5RHE148YDVDD9JWVS6FZRA60VS
-            cost: 12547840
-            path: contracts/pox-pool-self-service.clar
+            cost: 516712
+            path: contracts/pox4-self-service.clar
             anchor-block-only: true
             clarity-version: 2
         - contract-publish:
             contract-name: pox4-pools
             expected-sender: ST3FFRX7C911PZP5RHE148YDVDD9JWVS6FZRA60VS
-            cost: 12556226
+            cost: 516933
             path: contracts/pox4-pools.clar
             anchor-block-only: true
             clarity-version: 2
         - contract-publish:
             contract-name: helper
             expected-sender: ST3FFRX7C911PZP5RHE148YDVDD9JWVS6FZRA60VS
-            cost: 12486846
+            cost: 514066
             path: contracts/testing/helper.clar
             anchor-block-only: true
             clarity-version: 2
+        - contract-publish:
+            contract-name: payout-self-service
+            expected-sender: ST3FFRX7C911PZP5RHE148YDVDD9JWVS6FZRA60VS
+            cost: 515106
+            path: contracts/payout/payout-self-service.clar
+            anchor-block-only: true
+            clarity-version: 2
+    - id: 1
+      transactions:
+        - contract-call:
+            contract-id: ST3FFRX7C911PZP5RHE148YDVDD9JWVS6FZRA60VS.pox4-self-service-v3
+            expected-sender: ST3FFRX7C911PZP5RHE148YDVDD9JWVS6FZRA60VS
+            method: set-pool-pox-address-active
+            parameters:
+              - "{version: 0x04, hashbytes: 0x0c7fc13d45ff9a51ec36c0dac3b9c3589175500f}"
+            cost: 10000
       epoch: "2.5"
