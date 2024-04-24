@@ -15,4 +15,4 @@
 (define-read-only (get-total-stacked (cycle-id uint))
   (let (
       (reward-set-index (unwrap! (contract-call? 'SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.pox-fast-pool-v2 get-pox-addr-index cycle-id) err-no-reward-set-index)))
-    (to-int (get total-ustx (unwrap! (contract-call? 'SP000000000000000000002Q6VF78.pox-3 get-reward-set-pox-address cycle-id reward-set-index) err-no-reward-set)))))
+    (to-int (get total-ustx (unwrap! (contract-call? 'ST000000000000000000002AMW42H.pox-3 get-reward-set-pox-address cycle-id reward-set-index) err-no-reward-set)))))

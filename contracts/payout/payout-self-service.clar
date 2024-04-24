@@ -5,7 +5,7 @@
 (define-constant err-insufficient-rewards (err u502))
 (define-constant err-unexpected (err u999))
 
-(define-constant pox-info (unwrap-panic (contract-call? 'ST000000000000000000002AMW42H.pox-3 get-pox-info)))
+(define-constant pox-info (unwrap-panic (contract-call? 'ST000000000000000000002AMW42H.pox-4 get-pox-info)))
 (define-data-var rewards-admin principal tx-sender)
 (define-data-var reward-balance uint u0)
 (define-data-var last-reward-id uint u0)
@@ -114,7 +114,7 @@
 (define-private (set-ctx-reward (reward-id uint))
   (let (
     (reward-details (unwrap! (map-get? rewards reward-id) err-not-found))
-    (last-commit (unwrap! (contract-call? .pox-pool-self-service get-last-aggregation (get cycle reward-details)) err-not-found))
+    (last-commit (unwrap! (contract-call? .pox4-self-service-v3 get-last-aggregation (get cycle reward-details)) err-not-found))
     (id-header-hash (unwrap! (get-block-info? id-header-hash last-commit) err-not-found)))
   (var-set ctx-reward (merge {id-header-hash: id-header-hash, reward-id: reward-id}
     reward-details))
@@ -174,9 +174,9 @@
 
 (define-read-only (get-total-stacked (cycle-id uint))
   (let (
-      (reward-set-index (unwrap! (contract-call? .pox-pool-self-service get-pox-addr-index cycle-id) err-not-found)))
+      (reward-set-index (unwrap! (contract-call? .pox4-self-service-v3 get-pox-addr-index cycle-id) err-not-found)))
     (ok (get total-ustx (unwrap!
-      (contract-call? 'ST000000000000000000002AMW42H.pox-3
+      (contract-call? 'ST000000000000000000002AMW42H.pox-4
         get-reward-set-pox-address
         cycle-id reward-set-index) err-not-found)))))
 

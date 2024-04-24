@@ -5,7 +5,7 @@
 (define-data-var users (list 30 principal) (list))
 
 (define-constant deployer tx-sender)
-(define-constant pox-info (unwrap-panic (contract-call? 'ST000000000000000000002AMW42H.pox-3 get-pox-info)))
+(define-constant pox-info (unwrap-panic (contract-call? 'ST000000000000000000002AMW42H.pox-4 get-pox-info)))
 (define-constant cycle-length (get reward-cycle-length pox-info))
 (define-constant half-cycle-length (/ (get reward-cycle-length pox-info) u2))
 (define-constant first-burnchain-block-height (get first-burnchain-block-height pox-info))
@@ -39,7 +39,7 @@
   (let ((next-cycle (+ u1 (current-pox-reward-cycle))))
     (asserts! (unwrap-panic (check-job)) (ok false))
     (map-insert commits next-cycle block-height)
-    (try! (contract-call? .pox-pool-self-service delegate-stack-stx-many (var-get users)))
+    (try! (contract-call? .pox4-self-service-v3 delegate-stack-stx-many (var-get users)))
     (ok true)))
 
 (define-read-only (get-commit (reward-cycle uint))
