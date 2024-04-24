@@ -53,7 +53,7 @@
    hashbytes: 0x})
 (define-data-var stx-buffer uint u1000000) ;; 1 STX
 
-(define-constant pox-info (unwrap-panic (contract-call? 'SP000000000000000000002Q6VF78.pox-4 get-pox-info)))
+(define-constant pox-info (unwrap-panic (contract-call? 'ST000000000000000000002AMW42H.pox-4 get-pox-info)))
 ;; Half cycle lenght is 1050 for mainnet
 (define-constant half-cycle-length (/ (get reward-cycle-length pox-info) u2))
 
@@ -80,9 +80,9 @@
 (define-private (delegate-stx-inner (amount-ustx uint) (delegate-to principal) (until-burn-ht (optional uint)))
   (let ((result-revoke
             ;; Calls revoke and ignores result
-          (contract-call? 'SP000000000000000000002Q6VF78.pox-4 revoke-delegate-stx)))
+          (contract-call? 'ST000000000000000000002AMW42H.pox-4 revoke-delegate-stx)))
     ;; Calls delegate-stx, converts any error to uint
-    (match (contract-call? 'SP000000000000000000002Q6VF78.pox-4 delegate-stx amount-ustx delegate-to until-burn-ht none)
+    (match (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stx amount-ustx delegate-to until-burn-ht none)
       success (ok success)
       error (err (* u1000 (to-uint error))))))
 
@@ -102,7 +102,7 @@
                             (max (get locked user-account) (- allowed-amount buffer-amount))
                             allowed-amount)))
     (asserts! (var-get active) err-pox-address-deactivated)
-    (match (contract-call? 'SP000000000000000000002Q6VF78.pox-4 delegate-stack-stx
+    (match (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stack-stx
              user amount-ustx
              pox-address start-burn-ht u1)
       stacker-details  (begin
@@ -137,7 +137,7 @@
                       unlock-burn-height: unlock-burn-height}))
                 ;; else increase
                 (let ((increase-by (- amount-ustx locked-amount)))
-                  (match (contract-call? 'SP000000000000000000002Q6VF78.pox-4 delegate-stack-increase
+                  (match (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stack-increase
                           user pox-address increase-by)
                     success-increase (begin
                                       (map-extend-increase-locked-amount user increase-by unlock-burn-height)
@@ -154,10 +154,10 @@
                   (pox-address {hashbytes: (buff 32), version: (buff 1)})
                   (status {locked: uint, unlocked: uint, unlock-height: uint})
                 )
-  (let ((current-cycle (contract-call? 'SP000000000000000000002Q6VF78.pox-4 current-pox-reward-cycle))
+  (let ((current-cycle (contract-call? 'ST000000000000000000002AMW42H.pox-4 current-pox-reward-cycle))
         (unlock-height (get unlock-height status)))
     (if (not-locked-for-cycle unlock-height (+ u1 current-cycle))
-      (contract-call? 'SP000000000000000000002Q6VF78.pox-4 delegate-stack-extend
+      (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stack-extend
              user pox-address u1) ;; one cycle only
       (ok {stacker: user, unlock-burn-height: unlock-height}))))
 
@@ -221,12 +221,12 @@
             ;; Total stacked already reached minimum.
             ;; Call stack-aggregate-increase.
             ;; It might fail because called in the same cycle twice.
-      index (match (as-contract (contract-call? 'SP000000000000000000002Q6VF78.pox-4 stack-aggregation-increase (var-get pool-pox-address) reward-cycle index signer-sig signer-key max-amount auth-id))
+      index (match (as-contract (contract-call? 'ST000000000000000000002AMW42H.pox-4 stack-aggregation-increase (var-get pool-pox-address) reward-cycle index signer-sig signer-key max-amount auth-id))
               success (begin (map-set last-aggregation reward-cycle block-height) (ok true))
               error (begin (print {err-increase-ignored: error}) (ok false)))
             ;; Total stacked is still below minimum.
             ;; Just try to commit, it might fail because minimum not yet met
-      (match (as-contract (contract-call? 'SP000000000000000000002Q6VF78.pox-4 stack-aggregation-commit-indexed (var-get pool-pox-address) reward-cycle signer-sig signer-key max-amount auth-id))
+      (match (as-contract (contract-call? 'ST000000000000000000002AMW42H.pox-4 stack-aggregation-commit-indexed (var-get pool-pox-address) reward-cycle signer-sig signer-key max-amount auth-id))
         index (begin
                 (map-set pox-addr-indices reward-cycle index)
                 (map-set last-aggregation reward-cycle block-height)
@@ -298,12 +298,12 @@
 
 (define-read-only (get-reward-set-from-pox (reward-cycle uint))
   (match (map-get? pox-addr-indices reward-cycle)
-      index (contract-call? 'SP000000000000000000002Q6VF78.pox-4 get-reward-set-pox-address reward-cycle index)
+      index (contract-call? 'ST000000000000000000002AMW42H.pox-4 get-reward-set-pox-address reward-cycle index)
       none))
 
 ;; Returns currently delegated amount for a given user
 (define-read-only (get-delegated-amount (user principal))
-  (default-to u0 (get amount-ustx (contract-call? 'SP000000000000000000002Q6VF78.pox-4 get-delegation-info user))))
+  (default-to u0 (get amount-ustx (contract-call? 'ST000000000000000000002AMW42H.pox-4 get-delegation-info user))))
 
 (define-read-only (get-pox-addr-index (cycle uint))
   (map-get? pox-addr-indices cycle))

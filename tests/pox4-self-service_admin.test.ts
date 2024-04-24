@@ -46,8 +46,8 @@ describe(POX4_SELF_SERVICE_CONTRACT_NAME + " admin", () => {
       delegateStackStxMany([wallet_1], deployer),
     ]);
 
+    expectOkTrue(block, POX4_SELF_SERVICE_CONTRACT_NAME, "set-active", 0);
     // check allow contract caller
-    expectOkTrue(block, "pox-4", "allow-contract-caller", 0);
     expectOkTrue(block, "pox-4", "allow-contract-caller", 1);
     expect(block[2].result).toBeErr(Cl.uint(FpErrors.PoxAddressDeactivated));
     expect(block[3].result).toBeErr(Cl.uint(FpErrors.TooEarly));

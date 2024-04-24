@@ -21,7 +21,7 @@
 ;; Error code 9 is used by pox-4 contract for stacking-permission-denied
 (define-constant err-stacking-permission-denied (err u609))
 
-(define-constant pox-info (unwrap-panic (contract-call? 'SP000000000000000000002Q6VF78.pox-4 get-pox-info)))
+(define-constant pox-info (unwrap-panic (contract-call? 'ST000000000000000000002AMW42H.pox-4 get-pox-info)))
 
 ;; Allowed contract-callers handling a user's stacking activity.
 (define-map allowance-contract-callers
@@ -80,15 +80,15 @@
 
 ;; Get stacker info
 (define-private (pox-get-stacker-info (user principal))
-  (contract-call? 'SP000000000000000000002Q6VF78.pox-4 get-stacker-info user))
+  (contract-call? 'ST000000000000000000002AMW42H.pox-4 get-stacker-info user))
 
 ;; Revokes and delegates stx
 (define-private (delegate-stx-inner (amount-ustx uint) (delegate-to principal) (until-burn-ht (optional uint)))
   (let ((result-revoke
             ;; Calls revoke and ignores result
-          (contract-call? 'SP000000000000000000002Q6VF78.pox-4 revoke-delegate-stx)))
+          (contract-call? 'ST000000000000000000002AMW42H.pox-4 revoke-delegate-stx)))
     ;; Calls delegate-stx, converts any error to uint
-    (match (contract-call? 'SP000000000000000000002Q6VF78.pox-4 delegate-stx amount-ustx delegate-to until-burn-ht none)
+    (match (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stx amount-ustx delegate-to until-burn-ht none)
       success (ok success)
       error (err (* u1000 (to-uint error))))))
 
@@ -113,7 +113,7 @@
                       unlock-burn-height: unlock-burn-height}))
                 ;; else increase
                 (let ((increase-by (- amount-ustx locked-amount)))
-                  (match (contract-call? 'SP000000000000000000002Q6VF78.pox-4 delegate-stack-increase
+                  (match (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stack-increase
                           user pox-address increase-by)
                     success-increase (ok {lock-amount: increase-by,
                                           stacker: user,
@@ -131,7 +131,7 @@
   (let ((current-cycle (current-pox-reward-cycle))
         (unlock-height (get unlock-height status)))
     (if (not-locked-for-cycle unlock-height (+ u1 current-cycle))
-      (contract-call? 'SP000000000000000000002Q6VF78.pox-4 delegate-stack-extend
+      (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stack-extend
              user pox-address u1)
       (ok {stacker: user, unlock-burn-height: unlock-height}))))
 
@@ -176,7 +176,7 @@
               user-details
                 ;; Call delegate-stack-stx
                 ;; On failure, call delegate-stack-extend and increase
-                (match (contract-call? 'SP000000000000000000002Q6VF78.pox-4 delegate-stack-stx
+                (match (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stack-stx
                         user amount-ustx
                         pox-address start-burn-ht u1)
                   stacker-details  (begin
@@ -287,7 +287,7 @@
 
 ;; Returns currently delegated amount for a given user
 (define-read-only (get-delegated-amount (user principal))
-  (default-to u0 (get amount-ustx (contract-call? 'SP000000000000000000002Q6VF78.pox-4 get-delegation-info user))))
+  (default-to u0 (get amount-ustx (contract-call? 'ST000000000000000000002AMW42H.pox-4 get-delegation-info user))))
 
 ;; Returns information about last delegation call for a given user
 ;; This information can be obsolete due to a normal revoke call
