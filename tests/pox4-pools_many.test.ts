@@ -1,6 +1,5 @@
 import { expectOkTrue } from "@stacks/clarunit/src/parser/test-helpers.ts";
 import { hexToBytes } from "@stacks/common";
-import { StacksTestnet } from "@stacks/network";
 import {
   Pox4SignatureTopic,
   poxAddressToBtcAddress,
@@ -160,7 +159,7 @@ describe(POX4_POOLS + " many", () => {
           period,
           rewardCycle,
           maxAmount,
-          network: new StacksTestnet(),
+          network: "testnet",
           poxAddress,
           authId,
           privateKey: createStacksPrivateKey(privateKey),
@@ -183,7 +182,7 @@ describe(POX4_POOLS + " many", () => {
           period,
           rewardCycle,
           maxAmount,
-          network: new StacksTestnet(),
+          network: "testnet",
           poxAddress,
           authId: authId2,
           privateKey: createStacksPrivateKey(privateKey),
@@ -279,7 +278,7 @@ describe(POX4_POOLS + " many", () => {
           period,
           rewardCycle,
           maxAmount,
-          network: new StacksTestnet(),
+          network: "testnet",
           poxAddress,
           authId,
           privateKey: createStacksPrivateKey(privateKey),
@@ -310,7 +309,7 @@ describe(POX4_POOLS + " many", () => {
           period,
           rewardCycle,
           maxAmount,
-          network: new StacksTestnet(),
+          network: "testnet",
           poxAddress,
           authId,
           privateKey: createStacksPrivateKey(privateKey),

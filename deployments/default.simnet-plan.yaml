@@ -48,6 +48,9 @@ genesis:
 plan:
   batches:
     - id: 0
+      transactions: []
+      epoch: "2.05"
+    - id: 1
       transactions:
         - emulated-contract-publish:
             contract-name: arkadiko-automation-trait-v1
@@ -55,7 +58,148 @@ plan:
             path: "./.cache/requirements/SP3C0TCQS0C0YY8E0V3EJ7V4X9571885D44M8EFWF.arkadiko-automation-trait-v1.clar"
             clarity-version: 1
       epoch: "2.1"
-    - id: 1
+    - id: 2
+      transactions: []
+      epoch: "2.1"
+    - id: 3
+      transactions: []
+      epoch: "2.1"
+    - id: 4
+      transactions: []
+      epoch: "2.1"
+    - id: 5
+      transactions: []
+      epoch: "2.1"
+    - id: 6
+      transactions: []
+      epoch: "2.1"
+    - id: 7
+      transactions: []
+      epoch: "2.1"
+    - id: 8
+      transactions: []
+      epoch: "2.1"
+    - id: 9
+      transactions: []
+      epoch: "2.1"
+    - id: 10
+      transactions: []
+      epoch: "2.1"
+    - id: 11
+      transactions: []
+      epoch: "2.1"
+    - id: 12
+      transactions: []
+      epoch: "2.1"
+    - id: 13
+      transactions: []
+      epoch: "2.1"
+    - id: 14
+      transactions: []
+      epoch: "2.1"
+    - id: 15
+      transactions: []
+      epoch: "2.1"
+    - id: 16
+      transactions: []
+      epoch: "2.1"
+    - id: 17
+      transactions: []
+      epoch: "2.1"
+    - id: 18
+      transactions: []
+      epoch: "2.1"
+    - id: 19
+      transactions: []
+      epoch: "2.1"
+    - id: 20
+      transactions: []
+      epoch: "2.1"
+    - id: 21
+      transactions: []
+      epoch: "2.1"
+    - id: 22
+      transactions: []
+      epoch: "2.1"
+    - id: 23
+      transactions: []
+      epoch: "2.1"
+    - id: 24
+      transactions: []
+      epoch: "2.1"
+    - id: 25
+      transactions: []
+      epoch: "2.1"
+    - id: 26
+      transactions: []
+      epoch: "2.1"
+    - id: 27
+      transactions: []
+      epoch: "2.1"
+    - id: 28
+      transactions: []
+      epoch: "2.1"
+    - id: 29
+      transactions: []
+      epoch: "2.1"
+    - id: 30
+      transactions: []
+      epoch: "2.1"
+    - id: 31
+      transactions: []
+      epoch: "2.1"
+    - id: 32
+      transactions: []
+      epoch: "2.1"
+    - id: 33
+      transactions: []
+      epoch: "2.1"
+    - id: 34
+      transactions: []
+      epoch: "2.1"
+    - id: 35
+      transactions: []
+      epoch: "2.1"
+    - id: 36
+      transactions: []
+      epoch: "2.1"
+    - id: 37
+      transactions: []
+      epoch: "2.1"
+    - id: 38
+      transactions: []
+      epoch: "2.1"
+    - id: 39
+      transactions: []
+      epoch: "2.1"
+    - id: 40
+      transactions: []
+      epoch: "2.1"
+    - id: 41
+      transactions: []
+      epoch: "2.1"
+    - id: 42
+      transactions: []
+      epoch: "2.1"
+    - id: 43
+      transactions: []
+      epoch: "2.1"
+    - id: 44
+      transactions: []
+      epoch: "2.1"
+    - id: 45
+      transactions: []
+      epoch: "2.1"
+    - id: 46
+      transactions: []
+      epoch: "2.1"
+    - id: 47
+      transactions: []
+      epoch: "2.1"
+    - id: 48
+      transactions: []
+      epoch: "2.1"
+    - id: 49
       transactions:
         - emulated-contract-publish:
             contract-name: pox-fast-pool-v2
@@ -63,7 +207,148 @@ plan:
             path: "./.cache/requirements/SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.pox-fast-pool-v2.clar"
             clarity-version: 2
       epoch: "2.4"
-    - id: 2
+    - id: 50
+      transactions: []
+      epoch: "2.4"
+    - id: 51
+      transactions: []
+      epoch: "2.4"
+    - id: 52
+      transactions: []
+      epoch: "2.4"
+    - id: 53
+      transactions: []
+      epoch: "2.4"
+    - id: 54
+      transactions: []
+      epoch: "2.4"
+    - id: 55
+      transactions: []
+      epoch: "2.4"
+    - id: 56
+      transactions: []
+      epoch: "2.4"
+    - id: 57
+      transactions: []
+      epoch: "2.4"
+    - id: 58
+      transactions: []
+      epoch: "2.4"
+    - id: 59
+      transactions: []
+      epoch: "2.4"
+    - id: 60
+      transactions: []
+      epoch: "2.4"
+    - id: 61
+      transactions: []
+      epoch: "2.4"
+    - id: 62
+      transactions: []
+      epoch: "2.4"
+    - id: 63
+      transactions: []
+      epoch: "2.4"
+    - id: 64
+      transactions: []
+      epoch: "2.4"
+    - id: 65
+      transactions: []
+      epoch: "2.4"
+    - id: 66
+      transactions: []
+      epoch: "2.4"
+    - id: 67
+      transactions: []
+      epoch: "2.4"
+    - id: 68
+      transactions: []
+      epoch: "2.4"
+    - id: 69
+      transactions: []
+      epoch: "2.4"
+    - id: 70
+      transactions: []
+      epoch: "2.4"
+    - id: 71
+      transactions: []
+      epoch: "2.4"
+    - id: 72
+      transactions: []
+      epoch: "2.4"
+    - id: 73
+      transactions: []
+      epoch: "2.4"
+    - id: 74
+      transactions: []
+      epoch: "2.4"
+    - id: 75
+      transactions: []
+      epoch: "2.4"
+    - id: 76
+      transactions: []
+      epoch: "2.4"
+    - id: 77
+      transactions: []
+      epoch: "2.4"
+    - id: 78
+      transactions: []
+      epoch: "2.4"
+    - id: 79
+      transactions: []
+      epoch: "2.4"
+    - id: 80
+      transactions: []
+      epoch: "2.4"
+    - id: 81
+      transactions: []
+      epoch: "2.4"
+    - id: 82
+      transactions: []
+      epoch: "2.4"
+    - id: 83
+      transactions: []
+      epoch: "2.4"
+    - id: 84
+      transactions: []
+      epoch: "2.4"
+    - id: 85
+      transactions: []
+      epoch: "2.4"
+    - id: 86
+      transactions: []
+      epoch: "2.4"
+    - id: 87
+      transactions: []
+      epoch: "2.4"
+    - id: 88
+      transactions: []
+      epoch: "2.4"
+    - id: 89
+      transactions: []
+      epoch: "2.4"
+    - id: 90
+      transactions: []
+      epoch: "2.4"
+    - id: 91
+      transactions: []
+      epoch: "2.4"
+    - id: 92
+      transactions: []
+      epoch: "2.4"
+    - id: 93
+      transactions: []
+      epoch: "2.4"
+    - id: 94
+      transactions: []
+      epoch: "2.4"
+    - id: 95
+      transactions: []
+      epoch: "2.4"
+    - id: 96
+      transactions: []
+      epoch: "2.4"
+    - id: 97
       transactions:
         - emulated-contract-publish:
             contract-name: pox4-self-service-v3
@@ -86,13 +371,169 @@ plan:
             path: contracts/testing/helper.clar
             clarity-version: 2
         - emulated-contract-publish:
+            contract-name: payout-90-10-project
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/payout/payout-90-10-project.clar
+            clarity-version: 2
+        - emulated-contract-publish:
             contract-name: payout-self-service
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: contracts/payout/payout-self-service.clar
+            clarity-version: 2
+        - emulated-contract-publish:
+            contract-name: payout-trait
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/payout/payout-trait.clar
             clarity-version: 2
         - emulated-contract-publish:
             contract-name: pox4-pools_flow_test
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: tests/pox4-pools_flow_test.clar
             clarity-version: 2
+        - emulated-contract-publish:
+            contract-name: pox4-self-service-multi
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/pox4-self-service-multi.clar
+            clarity-version: 2
+      epoch: "2.5"
+    - id: 98
+      transactions: []
+      epoch: "2.5"
+    - id: 99
+      transactions: []
+      epoch: "2.5"
+    - id: 100
+      transactions: []
+      epoch: "2.5"
+    - id: 101
+      transactions: []
+      epoch: "2.5"
+    - id: 102
+      transactions: []
+      epoch: "2.5"
+    - id: 103
+      transactions: []
+      epoch: "2.5"
+    - id: 104
+      transactions: []
+      epoch: "2.5"
+    - id: 105
+      transactions: []
+      epoch: "2.5"
+    - id: 106
+      transactions: []
+      epoch: "2.5"
+    - id: 107
+      transactions: []
+      epoch: "2.5"
+    - id: 108
+      transactions: []
+      epoch: "2.5"
+    - id: 109
+      transactions: []
+      epoch: "2.5"
+    - id: 110
+      transactions: []
+      epoch: "2.5"
+    - id: 111
+      transactions: []
+      epoch: "2.5"
+    - id: 112
+      transactions: []
+      epoch: "2.5"
+    - id: 113
+      transactions: []
+      epoch: "2.5"
+    - id: 114
+      transactions: []
+      epoch: "2.5"
+    - id: 115
+      transactions: []
+      epoch: "2.5"
+    - id: 116
+      transactions: []
+      epoch: "2.5"
+    - id: 117
+      transactions: []
+      epoch: "2.5"
+    - id: 118
+      transactions: []
+      epoch: "2.5"
+    - id: 119
+      transactions: []
+      epoch: "2.5"
+    - id: 120
+      transactions: []
+      epoch: "2.5"
+    - id: 121
+      transactions: []
+      epoch: "2.5"
+    - id: 122
+      transactions: []
+      epoch: "2.5"
+    - id: 123
+      transactions: []
+      epoch: "2.5"
+    - id: 124
+      transactions: []
+      epoch: "2.5"
+    - id: 125
+      transactions: []
+      epoch: "2.5"
+    - id: 126
+      transactions: []
+      epoch: "2.5"
+    - id: 127
+      transactions: []
+      epoch: "2.5"
+    - id: 128
+      transactions: []
+      epoch: "2.5"
+    - id: 129
+      transactions: []
+      epoch: "2.5"
+    - id: 130
+      transactions: []
+      epoch: "2.5"
+    - id: 131
+      transactions: []
+      epoch: "2.5"
+    - id: 132
+      transactions: []
+      epoch: "2.5"
+    - id: 133
+      transactions: []
+      epoch: "2.5"
+    - id: 134
+      transactions: []
+      epoch: "2.5"
+    - id: 135
+      transactions: []
+      epoch: "2.5"
+    - id: 136
+      transactions: []
+      epoch: "2.5"
+    - id: 137
+      transactions: []
+      epoch: "2.5"
+    - id: 138
+      transactions: []
+      epoch: "2.5"
+    - id: 139
+      transactions: []
+      epoch: "2.5"
+    - id: 140
+      transactions: []
+      epoch: "2.5"
+    - id: 141
+      transactions: []
+      epoch: "2.5"
+    - id: 142
+      transactions: []
+      epoch: "2.5"
+    - id: 143
+      transactions: []
+      epoch: "2.5"
+    - id: 144
+      transactions: []
       epoch: "2.5"

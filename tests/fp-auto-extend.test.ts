@@ -1,5 +1,5 @@
 import { tx } from "@hirosystems/clarinet-sdk";
-import { Cl } from "@stacks/transactions";
+import { Cl, ClarityValue } from "@stacks/transactions";
 import { describe, expect, it } from "vitest";
 import { getCycleLength } from "./client/pox-4-client.js";
 
@@ -10,13 +10,13 @@ const { HALF_CYCLE } = getCycleLength();
 
 describe("fp-auto-extend", () => {
   it("Ensure that auto-extend-job does run with at least 1 user after half cycle passed", () => {
-    simnet.mineEmptyBlocks(HALF_CYCLE);
+    simnet.mineEmptyBurnBlocks(HALF_CYCLE);
 
     let block = simnet.mineBlock([
       tx.callPublicFn(
         "fp-auto-extend",
         "set-users",
-        [Cl.list([Cl.principal(wallet_1)])],
+        [Cl.list([Cl.principal(wallet_1)])] as ClarityValue[],
         deployer
       ),
       tx.callPublicFn("fp-auto-extend", "run-job", [], deployer),
@@ -28,7 +28,7 @@ describe("fp-auto-extend", () => {
   });
 
   it("Ensure that auto-extend-job does not run too early", () => {
-    simnet.mineEmptyBlocks(HALF_CYCLE - 2);
+    simnet.mineEmptyBurnBlock();
 
     let block = simnet.mineBlock([
       tx.callPublicFn(
@@ -46,7 +46,7 @@ describe("fp-auto-extend", () => {
   });
 
   it("Ensure that auto-extend-job does not run without at least 1 user", () => {
-    simnet.mineEmptyBlocks(HALF_CYCLE);
+    simnet.mineEmptyBurnBlocks(HALF_CYCLE);
 
     let block = simnet.mineBlock([
       tx.callPublicFn("fp-auto-extend", "run-job", [], deployer),

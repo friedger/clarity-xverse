@@ -5,7 +5,6 @@ import {
   ResponseOkCV,
   TupleCV,
   UIntCV,
-  cvToString,
 } from "@stacks/transactions";
 import { expect } from "vitest";
 

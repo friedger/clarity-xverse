@@ -191,7 +191,7 @@
     (ok (as-contract (fold lock-delegated-stx-fold users (list))))))
 
 ;; Calls stack aggregation increase. 
-(define-public (maybe-stack-aggregation-commit (current-cycle uint) (index uint)
+(define-public (stack-aggregation-increase (current-cycle uint) (index uint)
                   (signer-sig (optional (buff 65))) (signer-key (buff 33))
                   (max-amount uint) (auth-id uint))
   (let ((reward-cycle (+ u1 current-cycle)))

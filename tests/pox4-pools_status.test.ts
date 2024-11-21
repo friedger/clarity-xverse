@@ -169,14 +169,14 @@ describe(POX4_POOLS + " Status", () => {
           authId,
           maxAmount,
           period,
-          network: new StacksTestnet(),
+          network: "testnet",
           poxAddress: poxAddressToBtcAddress(
             hexToBytes(poxAddrPool1.version.substring(2))[0],
             hexToBytes(poxAddrPool1.hashbytes.substring(2)),
             "testnet"
           ),
           rewardCycle,
-          privateKey: createStacksPrivateKey(privateKey),
+          privateKey,
         }),
         signerKey,
         maxAmount,

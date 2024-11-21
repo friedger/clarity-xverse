@@ -1,11 +1,10 @@
 import { tx } from "@hirosystems/clarinet-sdk";
-import { TransactionVersion } from "@stacks/common";
+import { PrivateKey } from "@stacks/common";
 import {
   Cl,
   ClarityType,
-  StacksPrivateKey,
-  getAddressFromPrivateKey,
   makeRandomPrivKey,
+  privateKeyToAddress,
 } from "@stacks/transactions";
 import { describe, expect, it } from "vitest";
 import { allowContractCaller } from "./client/pox-4-client.js";
@@ -24,14 +23,11 @@ function generateWallets(count: number) {
     balanace: 0;
   }[] = [];
 
-  let privateKey: StacksPrivateKey;
+  let privateKey: PrivateKey;
   let address: string;
   for (let index = 0; index < count; index++) {
     privateKey = makeRandomPrivKey();
-    address = getAddressFromPrivateKey(
-      privateKey.data,
-      TransactionVersion.Mainnet
-    );
+    address = privateKeyToAddress(privateKey, "mainnet");
     users.push({
       address: address,
       name: `w${index}`,

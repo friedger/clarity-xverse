@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
 
 import { defineConfig } from "vite";
+import { configDefaults } from "vitest/config";
 import {
   vitestSetupFilePath,
   getClarinetVitestsArgv,
@@ -39,5 +40,6 @@ export default defineConfig({
         // add or override options
       },
     },
+    exclude: [...configDefaults.exclude, "integration/*"],
   },
 });

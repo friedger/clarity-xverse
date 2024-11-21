@@ -8,32 +8,89 @@ plan:
   batches:
     - id: 0
       transactions:
-        - contract-publish:
-            contract-name: pox-pool-self-service
-            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+        - requirement-publish:
+            contract-id: SP3C0TCQS0C0YY8E0V3EJ7V4X9571885D44M8EFWF.arkadiko-automation-trait-v1
+            remap-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            remap-principals:
+              SP3C0TCQS0C0YY8E0V3EJ7V4X9571885D44M8EFWF: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 2990
+            path: "./.cache/requirements/SP3C0TCQS0C0YY8E0V3EJ7V4X9571885D44M8EFWF.arkadiko-automation-trait-v1.clar"
+            clarity-version: 1
+      epoch: "2.05"
+    - id: 1
+      transactions:
+        - requirement-publish:
+            contract-id: SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.pox-fast-pool-v2
+            remap-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            remap-principals:
+              SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             cost: 180760
-            path: contracts/pox-pool-self-service.clar
+            path: "./.cache/requirements/SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.pox-fast-pool-v2.clar"
+            clarity-version: 2
+      epoch: "2.4"
+    - id: 2
+      transactions:
+        - contract-publish:
+            contract-name: pox4-self-service-v3
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 184840
+            path: contracts/pox4-self-service.clar
             anchor-block-only: true
             clarity-version: 2
         - contract-publish:
-            contract-name: pox-pools-1-cycle
+            contract-name: fp-auto-extend
             expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            cost: 198950
-            path: contracts/pox-pools-1-cycle.clar
+            cost: 21350
+            path: contracts/fast-pool/fp-auto-extend.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: pox4-pools
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 205590
+            path: contracts/pox4-pools.clar
             anchor-block-only: true
             clarity-version: 2
         - contract-publish:
             contract-name: helper
             expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            cost: 9320
+            cost: 9090
             path: contracts/testing/helper.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: payout-90-10-project
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 9950
+            path: contracts/payout/payout-90-10-project.clar
             anchor-block-only: true
             clarity-version: 2
         - contract-publish:
             contract-name: payout-self-service
             expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            cost: 70490
+            cost: 77890
             path: contracts/payout/payout-self-service.clar
             anchor-block-only: true
             clarity-version: 2
-      epoch: "2.4"
+        - contract-publish:
+            contract-name: payout-trait
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 1240
+            path: contracts/payout/payout-trait.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: pox4-pools_flow_test
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 11910
+            path: tests/pox4-pools_flow_test.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: pox4-self-service-multi
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 160940
+            path: contracts/pox4-self-service-multi.clar
+            anchor-block-only: true
+            clarity-version: 2
+      epoch: "2.5"
