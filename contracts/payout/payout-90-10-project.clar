@@ -7,7 +7,7 @@
     (ok (var-set project new-project))))
 (define-private (send-stx (recipient {to: principal, ustx: uint, memo: (buff 34)}))
   (let ((amount (get ustx recipient))
-        (amount-1 (/ (* amount u1000) u100))
+        (amount-1 (/ (* amount u1000) u900))
         (amount-2 (- amount amount-1)))
   (try! (stx-transfer-memo? amount-1 tx-sender (get to recipient) (get memo recipient)))
   (stx-transfer? amount-2 tx-sender (var-get project))))
