@@ -34,11 +34,6 @@
 ;; Data storage
 ;;
 
-;; Map of reward cycle to pox reward set index.
-;; Reward set index gives access to the total locked stx of the pool.
-(define-map pox-addr-indices uint uint)
-;; Map of reward cyle to block height of last commit
-(define-map last-aggregation uint uint)
 ;; Map of admins that can change the pox-address
 (define-map reward-admins principal bool)
 (map-set reward-admins tx-sender true)
@@ -190,23 +185,19 @@
     ;; Do 3. for users
     (ok (as-contract (fold lock-delegated-stx-fold users (list))))))
 
-;; Calls stack aggregation increase. 
+;; Calls stack aggregation increase.
 (define-public (stack-aggregation-increase (current-cycle uint) (index uint)
                   (signer-sig (optional (buff 65))) (signer-key (buff 33))
                   (max-amount uint) (auth-id uint))
   (let ((reward-cycle (+ u1 current-cycle)))
-      (match (as-contract (contract-call? 'ST000000000000000000002AMW42H.pox-4 stack-aggregation-increase (var-get pool-pox-address) reward-cycle index signer-sig signer-key max-amount auth-id))
-          success (ok (map-set last-aggregation reward-cycle block-height))
-            error (err error))))           
+    (as-contract (contract-call? 'ST000000000000000000002AMW42H.pox-4 stack-aggregation-increase (var-get pool-pox-address) reward-cycle index signer-sig signer-key max-amount auth-id))))
 
 ;; Calls stack aggregation commit.
 (define-public (stack-aggregation-commit (current-cycle uint)
                   (signer-sig (optional (buff 65))) (signer-key (buff 33))
                   (max-amount uint) (auth-id uint))
-  (let ((reward-cycle (+ u1 current-cycle)))    
-      (match (as-contract (contract-call? 'ST000000000000000000002AMW42H.pox-4 stack-aggregation-commit-indexed (var-get pool-pox-address) reward-cycle signer-sig signer-key max-amount auth-id))
-        index (begin (map-set last-aggregation reward-cycle block-height) (ok index))
-        error (err error))))
+  (let ((reward-cycle (+ u1 current-cycle)))
+    (as-contract (contract-call? 'ST000000000000000000002AMW42H.pox-4 stack-aggregation-commit-indexed (var-get pool-pox-address) reward-cycle signer-sig signer-key max-amount auth-id))))
 
 ;;
 ;; Admin functions
@@ -260,14 +251,8 @@
 (define-read-only (get-delegated-amount (user principal))
   (default-to u0 (get amount-ustx (contract-call? 'ST000000000000000000002AMW42H.pox-4 get-delegation-info user))))
 
-(define-read-only (get-pox-addr-index (cycle uint))
-  (map-get? pox-addr-indices cycle))
-
 (define-read-only (not-locked-for-cycle (unlock-burn-height uint) (cycle uint))
   (<= unlock-burn-height (reward-cycle-to-burn-height cycle)))
-
-(define-read-only (get-last-aggregation (cycle uint))
-  (map-get? last-aggregation cycle))
 
 (define-read-only (is-admin-enabled (admin principal))
   (map-get? reward-admins admin))
