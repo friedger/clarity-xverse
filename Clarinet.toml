@@ -16,6 +16,11 @@ path = 'contracts/pox4-self-service.clar'
 clarity_version = 2
 epoch = 2.5
 
+[contracts.pox4-self-service-multi]
+path = 'contracts/pox4-self-service-multi.clar'
+clarity_version = 2
+epoch = 2.5
+
 [contracts.pox4-pools]
 path = 'contracts/pox4-pools.clar'
 clarity_version = 2
@@ -29,6 +34,16 @@ epoch = 2.5
 ### Additional contracts
 [contracts.payout-self-service]
 path = 'contracts/payout/payout-self-service.clar'
+clarity_version = 2
+epoch = 2.5
+
+[contracts.payout-trait]
+path = 'contracts/payout/payout-trait.clar'
+clarity_version = 2
+epoch = 2.5
+
+[contracts.payout-90-10-project]
+path = 'contracts/payout/payout-90-10-project.clar'
 clarity_version = 2
 epoch = 2.5
 

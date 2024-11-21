@@ -131,11 +131,9 @@
                 (let ((increase-by (- amount-ustx locked-amount)))
                   (match (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stack-increase
                           user pox-address increase-by)
-                    success-increase (begin
-                                      (map-extend-increase-locked-amount user increase-by unlock-burn-height)
-                                      (ok {lock-amount: (get total-locked success-increase),
+                    success-increase (ok {lock-amount: (get total-locked success-increase),
                                           stacker: user,
-                                          unlock-burn-height: unlock-burn-height}))
+                                          unlock-burn-height: unlock-burn-height})
                     error-increase (err (* u1000000000 (to-uint error-increase)))))))
       error (err (* u1000000 (to-uint error))))))
 
@@ -167,7 +165,7 @@
         (current-cycle (current-pox-reward-cycle)))
     ;; Must be called directly by the tx-sender or by an allowed contract-caller
     (asserts! (check-caller-allowed) err-stacking-permission-denied)
-    (print {"a": "delegate-stx", payload: user-data})
+    (print {a: "delegate-stx", payload: user-data})
     ;; Do 1. and 2.
     (try! (delegate-stx-inner amount-ustx (as-contract tx-sender) none))
     ;; Do 3.
