@@ -4,7 +4,7 @@
 
 ;; Self-service non-custodial stacking pool
 ;; The pool locks for 1 cycle, amount can be increased at each cycle.
-;; Users trust reward admin to receive rewards according to distribution method.
+;; Users trust pool admin to receive rewards according to distribution method.
 ;; Users trust pool admin that their STX are used for specified signer.
 
 ;; User calls delegate-stx once.
@@ -35,8 +35,8 @@
 ;;
 
 ;; Map of admins that can change the pox-address
-(define-map reward-admins principal bool)
-(map-set reward-admins tx-sender true)
+(define-map pool-admins principal bool)
+(map-set pool-admins tx-sender true)
 
 (define-data-var active bool false)
 (define-data-var pool-pox-address {hashbytes: (buff 32), version: (buff 1)}
@@ -205,30 +205,30 @@
 
 (define-public (set-active (is-active bool))
   (begin
-    (asserts! (default-to false (map-get? reward-admins contract-caller)) err-unauthorized)
+    (asserts! (default-to false (map-get? pool-admins contract-caller)) err-unauthorized)
     (ok (var-set active is-active))))
 
 (define-public (set-pool-pox-address (pox-addr {hashbytes: (buff 32), version: (buff 1)}))
   (begin
-    (asserts! (default-to false (map-get? reward-admins contract-caller)) err-unauthorized)
+    (asserts! (default-to false (map-get? pool-admins contract-caller)) err-unauthorized)
     (ok (var-set pool-pox-address pox-addr))))
 
 (define-public (set-pool-pox-address-active (pox-addr {hashbytes: (buff 32), version: (buff 1)}))
   (begin
-    (asserts! (default-to false (map-get? reward-admins contract-caller)) err-unauthorized)
+    (asserts! (default-to false (map-get? pool-admins contract-caller)) err-unauthorized)
     (var-set pool-pox-address pox-addr)
     (ok (var-set active true))))
 
 (define-public (set-stx-buffer (amount-ustx uint))
   (begin
-    (asserts! (default-to false (map-get? reward-admins contract-caller)) err-unauthorized)
+    (asserts! (default-to false (map-get? pool-admins contract-caller)) err-unauthorized)
     (ok (var-set stx-buffer amount-ustx))))
 
 (define-public (set-reward-admin (new-admin principal) (enable bool))
   (begin
-    (asserts! (default-to false (map-get? reward-admins contract-caller)) err-unauthorized)
+    (asserts! (default-to false (map-get? pool-admins contract-caller)) err-unauthorized)
     (asserts! (not (is-eq contract-caller new-admin)) err-forbidden)
-    (ok (map-set reward-admins new-admin enable))))
+    (ok (map-set pool-admins new-admin enable))))
 
 ;;
 ;; Read-only functions
@@ -255,7 +255,7 @@
   (<= unlock-burn-height (reward-cycle-to-burn-height cycle)))
 
 (define-read-only (is-admin-enabled (admin principal))
-  (map-get? reward-admins admin))
+  (map-get? pool-admins admin))
 
 (define-read-only (get-pool-pox-address)
   (var-get pool-pox-address))

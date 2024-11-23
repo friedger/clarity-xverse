@@ -200,15 +200,15 @@ plan:
       transactions: []
       epoch: "2.1"
     - id: 49
+      transactions: []
+      epoch: "2.1"
+    - id: 50
       transactions:
         - emulated-contract-publish:
             contract-name: pox-fast-pool-v2
             emulated-sender: SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP
             path: "./.cache/requirements/SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.pox-fast-pool-v2.clar"
             clarity-version: 2
-      epoch: "2.4"
-    - id: 50
-      transactions: []
       epoch: "2.4"
     - id: 51
       transactions: []
@@ -349,6 +349,12 @@ plan:
       transactions: []
       epoch: "2.4"
     - id: 97
+      transactions: []
+      epoch: "2.4"
+    - id: 98
+      transactions: []
+      epoch: "2.4"
+    - id: 99
       transactions:
         - emulated-contract-publish:
             contract-name: pox4-self-service-v3
@@ -390,12 +396,6 @@ plan:
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: contracts/pox4-self-service-multi.clar
             clarity-version: 2
-      epoch: "2.5"
-    - id: 98
-      transactions: []
-      epoch: "2.5"
-    - id: 99
-      transactions: []
       epoch: "2.5"
     - id: 100
       transactions: []
@@ -530,5 +530,14 @@ plan:
       transactions: []
       epoch: "2.5"
     - id: 144
+      transactions: []
+      epoch: "2.5"
+    - id: 145
+      transactions: []
+      epoch: "2.5"
+    - id: 146
+      transactions: []
+      epoch: "2.5"
+    - id: 147
       transactions: []
       epoch: "2.5"
