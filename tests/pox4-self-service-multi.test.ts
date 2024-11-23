@@ -1,7 +1,7 @@
 import { expectOkTrue } from "@stacks/clarunit/src/parser/test-helpers.ts";
 import { Cl } from "@stacks/transactions";
 import { beforeEach, describe, expect, it } from "vitest";
-import { allowContractCaller, getCycleLength } from "./client/pox-4-client.js";
+import { allowContractCaller, getCycleLength } from "./client/pox4-client.js";
 import { poxAddrFP } from "./constants.ts";
 import {
   expectOkLockingResult,
@@ -96,6 +96,7 @@ describe("multi pool", () => {
 
   it("See that in simnet user can extend for next cycle for any user", () => {
     const { CYCLE, HALF_CYCLE } = getCycleLength();
+    const bootBlocks = simnet.blockHeight;
 
     let block = simnet.mineBlock([
       allowContractCaller(poxPoolSelfServiceMultiContract, undefined, wallet_1),
@@ -112,13 +113,13 @@ describe("multi pool", () => {
     expectPartialStackedByCycle(poxAddrFP, 2, undefined, deployer);
 
     // advance to middle of next cycle
-    simnet.mineEmptyBlocks(CYCLE + HALF_CYCLE - 4);
+    simnet.mineEmptyBlocks(CYCLE + HALF_CYCLE - bootBlocks - 1);
 
     // try to extend to cycle 2 early
     block = simnet.mineBlock([delegateStackStx(wallet_1, wallet_2)]);
     expect(block.length).toBe(1);
     expect(block[0].result).toBeErr(Cl.uint(500)); // too early
-    expect(simnet.blockHeight).toBe(CYCLE + HALF_CYCLE + 2);
+    expect(simnet.blockHeight).toBe(CYCLE + HALF_CYCLE + 1);
 
     // extend to cycle 2
     block = simnet.mineBlock([delegateStackStx(wallet_1, wallet_2)]);

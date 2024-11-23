@@ -1,6 +1,6 @@
 import { tx } from "@hirosystems/clarinet-sdk";
 import { Cl } from "@stacks/transactions";
-import { poxAddrCV } from "./pox-4-client";
+import { poxAddrCV } from "./pox4-client";
 import { poxAddressToTuple } from "@stacks/stacking";
 
 export const POX4_SELF_SERVICE_MULTI_CONTRACT_NAME = "pox4-self-service-multi";
@@ -29,7 +29,7 @@ export function delegateStx(amount: number, user: string) {
   return tx.callPublicFn(
     POX4_SELF_SERVICE_MULTI_CONTRACT_NAME,
     "delegate-stx",
-    [Cl.uint(amount)],
+    [Cl.uint(amount), Cl.bufferFromHex("")],
     user
   );
 }
