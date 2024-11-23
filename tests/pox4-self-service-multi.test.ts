@@ -1,27 +1,26 @@
 import { expectOkTrue } from "@stacks/clarunit/src/parser/test-helpers.ts";
 import { Cl } from "@stacks/transactions";
 import { beforeEach, describe, expect, it } from "vitest";
-import { allowContractCaller, getCycleLength } from "./client/pox-4-client.js";
-import {
-  POX4_SELF_SERVICE_CONTRACT_NAME,
-  delegateStackStx,
-  delegateStx,
-  poxPoolSelfServiceContract,
-  setPoxAddressActive,
-} from "./client/pox4-self-service-client.ts";
+import { allowContractCaller, getCycleLength } from "./client/pox4-client.js";
 import { poxAddrFP } from "./constants.ts";
 import {
   expectOkLockingResult,
   expectPartialStackedByCycle,
   expectTotalStackedByCycle,
 } from "./utils.ts";
+import {
+  delegateStackStx,
+  delegateStx,
+  POX4_SELF_SERVICE_MULTI_CONTRACT_NAME,
+  poxPoolSelfServiceMultiContract,
+  setPoxAddressActive,
+} from "./client/pox4-self-service-multi-client.ts";
 
 const accounts = simnet.getAccounts();
 const deployer = accounts.get("deployer")!;
 const wallet_1 = accounts.get("wallet_1")!;
 const wallet_2 = accounts.get("wallet_2")!;
-
-describe(POX4_SELF_SERVICE_CONTRACT_NAME, () => {
+describe("multi pool", () => {
   beforeEach(() => {
     let block = simnet.mineBlock([
       setPoxAddressActive(
@@ -31,14 +30,14 @@ describe(POX4_SELF_SERVICE_CONTRACT_NAME, () => {
     ]);
     expectOkTrue(
       block,
-      POX4_SELF_SERVICE_CONTRACT_NAME,
+      POX4_SELF_SERVICE_MULTI_CONTRACT_NAME,
       "set-pox-address-active"
     );
   });
   it("Ensure that users can delegate", () => {
     let block = simnet.mineBlock([
-      allowContractCaller(poxPoolSelfServiceContract, undefined, wallet_1),
-      allowContractCaller(poxPoolSelfServiceContract, undefined, wallet_2),
+      allowContractCaller(poxPoolSelfServiceMultiContract, undefined, wallet_1),
+      allowContractCaller(poxPoolSelfServiceMultiContract, undefined, wallet_2),
       delegateStx(20_000_000_000_100, wallet_1),
       delegateStx(2_100_000, wallet_2),
     ]);
@@ -70,7 +69,7 @@ describe(POX4_SELF_SERVICE_CONTRACT_NAME, () => {
 
     // delegate 2 stx for cycle 1
     let block = simnet.mineBlock([
-      allowContractCaller(poxPoolSelfServiceContract, undefined, wallet_1),
+      allowContractCaller(poxPoolSelfServiceMultiContract, undefined, wallet_1),
       delegateStx(2_000_000, wallet_1),
     ]);
 
@@ -97,9 +96,10 @@ describe(POX4_SELF_SERVICE_CONTRACT_NAME, () => {
 
   it("See that in simnet user can extend for next cycle for any user", () => {
     const { CYCLE, HALF_CYCLE } = getCycleLength();
+    const bootBlocks = simnet.blockHeight;
 
     let block = simnet.mineBlock([
-      allowContractCaller(poxPoolSelfServiceContract, undefined, wallet_1),
+      allowContractCaller(poxPoolSelfServiceMultiContract, undefined, wallet_1),
       delegateStx(2_000_000, wallet_1),
     ]);
 
@@ -113,13 +113,13 @@ describe(POX4_SELF_SERVICE_CONTRACT_NAME, () => {
     expectPartialStackedByCycle(poxAddrFP, 2, undefined, deployer);
 
     // advance to middle of next cycle
-    simnet.mineEmptyBlocks(CYCLE + HALF_CYCLE - 4);
+    simnet.mineEmptyBlocks(CYCLE + HALF_CYCLE - bootBlocks - 1);
 
     // try to extend to cycle 2 early
     block = simnet.mineBlock([delegateStackStx(wallet_1, wallet_2)]);
     expect(block.length).toBe(1);
     expect(block[0].result).toBeErr(Cl.uint(500)); // too early
-    expect(simnet.blockHeight).toBe(CYCLE + HALF_CYCLE + 2);
+    expect(simnet.blockHeight).toBe(CYCLE + HALF_CYCLE + 1);
 
     // extend to cycle 2
     block = simnet.mineBlock([delegateStackStx(wallet_1, wallet_2)]);

@@ -6,27 +6,29 @@
     "email": "mail@friedger.de"
   },
   "repository": "https://github.com/friedger/clarity-stacking-pools.git",
+  "type": "module",
   "private": true,
   "engines": {
     "node": ">=14"
   },
   "scripts": {
-    "build": "tsc --build",
-    "test": "vitest run -- --coverage",
-    "genhtml": "genhtml lcov.info --branch-coverage -o coverage/"
+    "test": "vitest run",
+    "test:report": "vitest run -- --coverage --costs",
+    "test:watch": "chokidar \"tests/**/*.ts\" \"contracts/**/*.clar\" -c \"npm run test:report\""
   },
+  "license": "GPL-3.0-only",
   "dependencies": {
-    "@hirosystems/clarinet-sdk": "^2.4.1",
+    "@hirosystems/clarinet-sdk": "^2.11.2",
     "@stacks/clarunit": "0.0.2",
-    "@stacks/common": "^6.13.0",
-    "@stacks/network": "^6.13.0",
-    "@stacks/stacking": "^6.13.1",
-    "@stacks/transactions": "^6.13.1",
+    "@stacks/common": "6.16.0",
+    "@stacks/network": "6.17.0",
+    "@stacks/transactions": "6.17.0",
+    "@stacks/stacking": "6.17.0",
     "chokidar-cli": "^3.0.0",
-    "fast-check": "^3.15.1",
-    "typescript": "^5.4.2",
-    "vite": "^5.2.8",
-    "vitest": "^1.4.0",
-    "vitest-environment-clarinet": "^2.0.0"
+    "fast-check": "^3.23.1",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.5",
+    "vitest-environment-clarinet": "^2.1.0"
   }
 }
